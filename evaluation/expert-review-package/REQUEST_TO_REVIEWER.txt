@@ -1,0 +1,9 @@
+Subject: Request for independent blind legal review of IPC and BNS evaluation cases
+
+Please review the attached IPC and BNS Blind Expert Review Packet as an independent legal expert.
+
+First, complete Phase A for all 10 cases without requesting or viewing any model output. For each case, determine the applicable legal framework, the correct Top-1 provision, up to three acceptable retrieval provisions, and any necessary clarifications or corrections. Please use authoritative statutory and commencement materials and identify uncertainty rather than guessing missing facts.
+
+Return or preserve a dated copy of the completed Phase A answers before beginning Phase B. After Phase A has been locked, case-matched model output excerpts can be supplied separately for citation, grounding, and IRAC quality review. The sealed prediction file is intentionally not included in the review package.
+
+Please complete the declaration and return checklist in the packet. The completed results will be used only to calculate an independent evaluation score and identify corrections needed in the retrieval and legal-reasoning pipeline.

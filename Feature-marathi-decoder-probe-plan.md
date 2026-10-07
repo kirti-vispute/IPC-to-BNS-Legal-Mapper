@@ -1,0 +1,11 @@
+# Marathi Decoder Prefix Probe
+
+Started: 2026-10-04; registered/executed: 2026-10-05. Offline diagnosis only; no production/model/evaluation change. Results use exclusive `output/public-speech-validation/marathi-decoder-probe-20261005/`.
+
+Use the already inspected `mr-30.wav` shared 80x3000 float32 feature file from the source-parity run. Prior full output shares first five generated token IDs after `[50258,50320,50359,50363]` and then differs. Probe the start prefix and the common five-token prefix. Register this plan, tool, test, features, model identities, observed suppression list, prior outputs, and installed decoding code before inference. Never use reserved holdout audio.
+
+Source float32: eager/eval CPU with four threads. For each prefix get one-step raw logits with `attention_mask=None` and an explicit all-ones full-feature mask. Report top ten raw and after applying the previously observed general suppression list plus begin suppression only at the initial prompt. Compare masks numerically; all-ones is a control, not a claim about true audio duration. Use direct `forward` with fixed decoder prefix to avoid beam/prompt rewriting. For the initial prefix also request one generated token under beam1 and beam3, with and without an explicit full-feature mask, using the same suppression settings as the earlier full run.
+
+Converted int8: fixed features and same two prefixes; one-token `generate` with beam1/beam3 and the previously observed suppression list versus an empty list, retaining `suppress_blank=True`. Request vocabulary scores via installed `return_logits_vocab`/result `logits`; record shapes, top ten when the last dimension is the vocabulary, and available result fields. Negative infinity is a suppressed candidate, never an answer. No claim of identical logit scale between implementations.
+
+Interpretation: distinguish first-step agreement from later divergence, test whether source masking changes fixed-prefix logits, and identify whether suppression/beam changes the one-token choice. Full sequence beam behavior and int8-versus-float32 remain confounded. No speech/legal accuracy, speed, conversion-defect or website claim. Do not modify app settings from these results.

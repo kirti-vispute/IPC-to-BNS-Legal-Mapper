@@ -1,0 +1,783 @@
+{
+  "protocol": "blind-legal-evaluation-v1",
+  "generatedAt": "2026-09-08T14:48:27.516Z",
+  "casesPath": "D:\\Kirti\\__VIT RELATED\\Lab Experiments\\NLP\\Project\\evaluation\\cases\\candidate-cases.jsonl",
+  "caseFileSha256": "65369f727585453b1a694029b5159c037de42630cfbbac3c895328cbbf7dba36",
+  "caseCount": 10,
+  "labelAccess": "No label file is imported or accepted by this command.",
+  "predictions": [
+    {
+      "caseId": "blind-001",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-06-20",
+            "raw": "20 June 2024",
+            "context": "On 20 June 2024, property was dishonestly moved out of anoth"
+          }
+        ],
+        "offenseDate": "2024-06-20",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [
+          "dishonest",
+          "property"
+        ],
+        "continuingSignal": false
+      },
+      "applicableRoute": "IPC_ONLY",
+      "routeMessage": "The offense date is before July 1, 2024, so BNS provisions are blocked as the charging framework.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "ipc-403",
+          "code": "IPC",
+          "section": "403",
+          "title": "Dishonest misappropriation of property",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 161,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "ipc-404",
+          "code": "IPC",
+          "section": "404",
+          "title": "Dishonest misappropriation of property possessed by deceased person at the time of his death",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 163,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "ipc-92",
+          "code": "IPC",
+          "section": "92",
+          "title": "Act done in good faith for benefit of a person without consent",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 31,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-06-20.",
+        "rule": "The offense date is before July 1, 2024, so BNS provisions are blocked as the charging framework. Retrieved rule material: IPC Section 403 - Dishonest misappropriation of property.--Whoever dishonestly misappropriates or converts to his own use any movable property, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both. ---------------------------------------------------------------------- 1. Subs. by Act 26 of 1955, s. 117 and Sch., for \"transportation for life.\" ---------------------------------------------------------------------- 192 Illustrations (a) A takes property belonging to Z out of Z's possession in good fait... IPC Section 404 - Dishonest misappropriation of property possessed by deceased person at the time of his death.-Whoever dishonestly misappropriates or converts to his own use property, knowing that such property was in the possession of a deceased person at the time of that person's decease, and has not since been in the possession of any person legally entitled to such possession, shall be punished with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine, and if the offender at the time of such person's decease... IPC Section 92 - Act done in good faith for benefit of a person without consent.-Nothing is an offence by reason of any harm which it may causes to a person for whose benefit it is done in good faith, even without that person's consent, if the circumstances are such that it is impossible for that person to signify consent, or if that person is incapable of giving consent, and has no guardian or other person in lawful charge of him from whom it is possible to obtain consent in time for the thing to be done with benefit: Provided- Provisos. 117 Provisos.-First.-That this e...",
+        "application": "Detected legal terms include dishonest, property. The retrieval layer returned IPC 403, IPC 404, IPC 92. The gateway route is IPC_ONLY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "IPC Section 403 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "IPC 403: Dishonest misappropriation of property (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 161)",
+          "IPC 404: Dishonest misappropriation of property possessed by deceased person at the time of his death (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 163)",
+          "IPC 92: Act done in good faith for benefit of a person without consent (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 31)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    },
+    {
+      "caseId": "blind-002",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-07-12",
+            "raw": "12 July 2024",
+            "context": "On 12 July 2024, movable property was dishonestly taken from"
+          }
+        ],
+        "offenseDate": "2024-07-12",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [
+          "movable",
+          "dishonest",
+          "property"
+        ],
+        "continuingSignal": true
+      },
+      "applicableRoute": "BNS_PRIMARY",
+      "routeMessage": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "bns-314",
+          "code": "BNS",
+          "section": "314",
+          "title": "Whoever dishonestly misappropriates or converts to his own use any movable Dishonest property, shall",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 83,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "bns-129",
+          "code": "BNS",
+          "section": "129",
+          "title": "Whoever intentionally uses force to any person, without that person’s consent, Criminal force",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 43,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "bns-320",
+          "code": "BNS",
+          "section": "320",
+          "title": "Whoever dishonestly or fraudulently removes, conceals or delivers to any person, Dishonest or or",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 87,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-07-12.",
+        "rule": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context. Retrieved rule material: BNS Section 314 - Whoever dishonestly misappropriates or converts to his own use any movable Dishonest property, shall be punished with imprisonment of either description for a term which shall not misappropriation of property. be less than six months but which may extend to two years and with fine. Illustrations. (a) A takes property belonging to Z out of Z’s possession, in good faith believing at the time when he takes it, that the property belongs to himself. A is not guilty of theft; but if A, after discovering his mistake, dishonestly appropriates the property to his... BNS Section 129 - Whoever intentionally uses force to any person, without that person’s consent, Criminal force. in order to the committing of any offence, or intending by the use of such force to cause, or knowing it to be likely that by the use of such force he will cause injury, fear or annoyance to the person to whom the force is used, is said to use criminal force to that other. Illustrations. (a) Z is sitting in a moored boat on a river. A unfastens the moorings, and thus intentionally causes the boat to drift down the stream. Here A intentionally causes motion to Z... BNS Section 320 - Whoever dishonestly or fraudulently removes, conceals or delivers to any person, Dishonest or or transfers or causes to be transferred to any person, without adequate consideration, any fraudulent removal or property, intending thereby to prevent, or knowing it to be likely that he will thereby prevent, concealment the distribution of that property according to law among his creditors or the creditors of any of property to other person, shall be punished with imprisonment of either description for a term which prevent shall not be less than six months bu...",
+        "application": "Detected legal terms include movable, dishonest, property. The retrieval layer returned BNS 314, BNS 129, BNS 320. The gateway route is BNS_PRIMARY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "BNS Section 314 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "BNS 314: Whoever dishonestly misappropriates or converts to his own use any movable Dishonest property, shall (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 83)",
+          "BNS 129: Whoever intentionally uses force to any person, without that person’s consent, Criminal force (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 43)",
+          "BNS 320: Whoever dishonestly or fraudulently removes, conceals or delivers to any person, Dishonest or or (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 87)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    },
+    {
+      "caseId": "blind-003",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-06-18",
+            "raw": "18 June 2024",
+            "context": "The alleged act occurred on 18 June 2024 and intentionally caused another person's de"
+          }
+        ],
+        "offenseDate": "2024-06-18",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [],
+        "continuingSignal": false
+      },
+      "applicableRoute": "IPC_ONLY",
+      "routeMessage": "The offense date is before July 1, 2024, so BNS provisions are blocked as the charging framework.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "ipc-88",
+          "code": "IPC",
+          "section": "88",
+          "title": "Act not intended to cause death, done by consent in good faith for person's benefit",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 29,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "ipc-225",
+          "code": "IPC",
+          "section": "225",
+          "title": "Resistance or obstruction to lawful apprehension of another person",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 93,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "ipc-314",
+          "code": "IPC",
+          "section": "314",
+          "title": "Death caused by act done with intent to cause miscarriage",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 127,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-06-18.",
+        "rule": "The offense date is before July 1, 2024, so BNS provisions are blocked as the charging framework. Retrieved rule material: IPC Section 88 - Act not intended to cause death, done by consent in good faith for person's benefit.--Nothing, which is not intented to cause death, is an offence by reason of any harm which it may cause, or be intended by the doer to cause, or be known by the doer to be likely to cause, to any person for whose benefit it is done in good faith, and who has given a consent, whether express or implied to suffer that harm, or to take the risk of that harm. Illustration A, a surgeon, knowing that a particular operation is likely to cause the death of Z, who suffers under th... IPC Section 225 - Resistance or obstruction to lawful apprehension of another person.--Whoever intentionally offers any resistance or illegal obstruction to the lawful apprehension of any other person for an offence, or rescues or attempts to rescue any other person from any custody in which that person is lawfully detained for an offence, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both; or, if the person to be apprehended, or the person rescued or attempted to be rescued, is charged with or li... IPC Section 314 - Death caused by act done with intent to cause miscarriage.-- Whoever, with intent to cause the miscarriage of a woman with child, does any act which causes the death of such woman, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine; if act done without woman's consent. if act done without woman's consent.--and if the act is done without the consent of the woman, shall be punished either with 2*[imprisonment for life], or with the punishment above mentioned. Explanation.-It...",
+        "application": "The retrieval layer returned IPC 88, IPC 225, IPC 314. The gateway route is IPC_ONLY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "IPC Section 88 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "IPC 88: Act not intended to cause death, done by consent in good faith for person's benefit (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 29)",
+          "IPC 225: Resistance or obstruction to lawful apprehension of another person (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 93)",
+          "IPC 314: Death caused by act done with intent to cause miscarriage (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 127)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    },
+    {
+      "caseId": "blind-004",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-07-12",
+            "raw": "12 July 2024",
+            "context": "On 12 July 2024, a person was deceived and dishonestly induc"
+          }
+        ],
+        "offenseDate": "2024-07-12",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [
+          "dishonest",
+          "property"
+        ],
+        "continuingSignal": false
+      },
+      "applicableRoute": "BNS_PRIMARY",
+      "routeMessage": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "bns-314",
+          "code": "BNS",
+          "section": "314",
+          "title": "Whoever dishonestly misappropriates or converts to his own use any movable Dishonest property, shall",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 83,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "bns-320",
+          "code": "BNS",
+          "section": "320",
+          "title": "Whoever dishonestly or fraudulently removes, conceals or delivers to any person, Dishonest or or",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 87,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "bns-322",
+          "code": "BNS",
+          "section": "322",
+          "title": "Whoever dishonestly or fraudulently signs, executes or becomes a party to any Dishonest or",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 87,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-07-12.",
+        "rule": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context. Retrieved rule material: BNS Section 314 - Whoever dishonestly misappropriates or converts to his own use any movable Dishonest property, shall be punished with imprisonment of either description for a term which shall not misappropriation of property. be less than six months but which may extend to two years and with fine. Illustrations. (a) A takes property belonging to Z out of Z’s possession, in good faith believing at the time when he takes it, that the property belongs to himself. A is not guilty of theft; but if A, after discovering his mistake, dishonestly appropriates the property to his... BNS Section 320 - Whoever dishonestly or fraudulently removes, conceals or delivers to any person, Dishonest or or transfers or causes to be transferred to any person, without adequate consideration, any fraudulent removal or property, intending thereby to prevent, or knowing it to be likely that he will thereby prevent, concealment the distribution of that property according to law among his creditors or the creditors of any of property to other person, shall be punished with imprisonment of either description for a term which prevent shall not be less than six months bu... BNS Section 322 - Whoever dishonestly or fraudulently signs, executes or becomes a party to any Dishonest or deed or instrument which purports to transfer or subject to any charge any property, or any fraudulent execution of interest therein, and which contains any false statement relating to the consideration for deed of transfer such transfer or charge, or relating to the person or persons for whose use or benefit it is containing really intended to operate, shall be punished with imprisonment of either description for a false statement o f term which may extend to thre...",
+        "application": "Detected legal terms include dishonest, property. The retrieval layer returned BNS 314, BNS 320, BNS 322. The gateway route is BNS_PRIMARY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "BNS Section 314 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "BNS 314: Whoever dishonestly misappropriates or converts to his own use any movable Dishonest property, shall (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 83)",
+          "BNS 320: Whoever dishonestly or fraudulently removes, conceals or delivers to any person, Dishonest or or (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 87)",
+          "BNS 322: Whoever dishonestly or fraudulently signs, executes or becomes a party to any Dishonest or (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 87)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    },
+    {
+      "caseId": "blind-005",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-06-20",
+            "raw": "20 June 2024",
+            "context": "A deceptive course of conduct continued from 20 June 2024 until 12 July 2024 and caused delivery of pr"
+          },
+          {
+            "value": "2024-07-12",
+            "raw": "12 July 2024",
+            "context": "of conduct continued from 20 June 2024 until 12 July 2024 and caused delivery of property."
+          }
+        ],
+        "offenseDate": null,
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [
+          "property",
+          "delivery"
+        ],
+        "continuingSignal": true
+      },
+      "applicableRoute": "MULTI_PERIOD_REVIEW",
+      "routeMessage": "The facts appear to span the IPC/BNS transition. Both corpora are retrieved and the output is flagged for review.",
+      "reviewRequired": true,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "ipc-420",
+          "code": "IPC",
+          "section": "420",
+          "title": "Cheating and dishonestly inducing delivery of property",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 169,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "bns-101",
+          "code": "BNS",
+          "section": "101",
+          "title": "Murder",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 32,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "ipc-239",
+          "code": "IPC",
+          "section": "239",
+          "title": "Delivery of coin possessed with knowledge that it is counterfeit",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 99,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-06-20 to 2024-07-12.",
+        "rule": "The facts appear to span the IPC/BNS transition. Both corpora are retrieved and the output is flagged for review. Retrieved rule material: IPC Section 420 - Cheating and dishonestly inducing delivery of property.-- Whoever cheats and thereby dishonestly induces the person deceived to deliver any property to any person, or to make, alter or destroy the whole or any part of a valuable security, or anything which is signed or sealed, and which is capable of being converted into a valuable security, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine. Of fraudulent deeds and dispositions of property BNS Section 101 - ...r excepted, culpable homicide is murder,–– (a) if the act by which the death is caused is done with the intention of causing death; or (b) if the act by which the death is caused is done with the intention of causing such bodily injury as the offender knows to be likely to cause the death of the person to whom the harm is caused; or (c) if the act by which the death is caused is done with the intention of causing bodily injury to any person and the bodily injury intended to be inflicted is sufficient in the ordinary course of nature to cause death; or (d... IPC Section 239 - Delivery of coin possessed with knowledge that it is counterfeit.--Whoever, having any counterfeit coin, which at the time when he became possessed of it, he knew to be counterfeit, fraudulently or with intent that fraud may be committed, delivers the same to any persons or attempts to induce any person to receive it, shall be punished with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine",
+        "application": "Detected legal terms include property, delivery. The retrieval layer returned IPC 420, BNS 101, IPC 239. The gateway route is MULTI_PERIOD_REVIEW, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "IPC Section 420 is the strongest retrieved candidate for this query. Human review is required before relying on the mapping.",
+        "citations": [
+          "IPC 420: Cheating and dishonestly inducing delivery of property (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 169)",
+          "BNS 101: Murder (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 32)",
+          "IPC 239: Delivery of coin possessed with knowledge that it is counterfeit (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 99)"
+        ]
+      },
+      "verifier": {
+        "status": "NEEDS_REVIEW",
+        "warnings": [
+          "The facts appear to span the IPC/BNS transition. Both corpora are retrieved and the output is flagged for review."
+        ]
+      }
+    },
+    {
+      "caseId": "blind-006",
+      "extractedFacts": {
+        "dates": [],
+        "offenseDate": null,
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [
+          "dishonest",
+          "property",
+          "delivery",
+          "state"
+        ],
+        "continuingSignal": false
+      },
+      "applicableRoute": "CLARIFY",
+      "routeMessage": "A clear offense date is required before statutory retrieval.",
+      "reviewRequired": true,
+      "retrieved": [],
+      "irac": {
+        "issue": "The statutory route cannot be selected because the offense date is missing or ambiguous.",
+        "rule": "The temporal gateway requires a clear offense date before it can decide whether IPC, BNS, or a multi-period review path applies.",
+        "application": "The submitted query should be revised to include the date when the alleged conduct occurred.",
+        "conclusion": "Clarification is required before retrieval or mapping can proceed.",
+        "citations": []
+      },
+      "verifier": {
+        "status": "NEEDS_REVIEW",
+        "warnings": [
+          "A clear offense date is required before statutory retrieval.",
+          "No retrieved source text is available for grounded synthesis."
+        ]
+      }
+    },
+    {
+      "caseId": "blind-007",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-07-12",
+            "raw": "12 July 2024",
+            "context": "On 12 July 2024, a crime syndicate carried out continuing un"
+          }
+        ],
+        "offenseDate": "2024-07-12",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [
+          "crime",
+          "syndicate",
+          "continuing",
+          "unlawful"
+        ],
+        "continuingSignal": true
+      },
+      "applicableRoute": "BNS_PRIMARY",
+      "routeMessage": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "bns-111",
+          "code": "BNS",
+          "section": "111",
+          "title": "(1) Any continuing unlawful activity including kidnapping, robbery, vehicle Organised theft, extortion, land grabbing",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 35,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "bns-146",
+          "code": "BNS",
+          "section": "146",
+          "title": "Whoever unlawfully compels any person to labour against the will of that person, Unlawful",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 47,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "bns-189",
+          "code": "BNS",
+          "section": "189",
+          "title": "Unlawful",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 54,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-07-12.",
+        "rule": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context. Retrieved rule material: BNS Section 111 - (1) Any continuing unlawful activity including kidnapping, robbery, vehicle Organised theft, extortion, land grabbing, contract killing, economic offence, cyber-crimes, trafficking crime. of persons, drugs, weapons or illicit goods or services, human trafficking for prostitution or ransom, by any person or a group of persons acting in concert, singly or jointly, either as a member of an organised crime syndicate or on behalf of such syndicate, by use of violence, threat of violence, intimidation, coercion, or by any other unlawful means to obtain direct... BNS Section 146 - Whoever unlawfully compels any person to labour against the will of that person, Unlawful shall be punished with imprisonment of either description for a term which may extend to one compulsory labour. year, or with fine, or with both. CHAPTER VII OF OFFENCES AGAINST THE STATE BNS Section 189 - (1) An assembly of five or more persons is designated an “unlawful assembly”, if assembly. the common object of the persons composing that assembly is— (a) to overawe by criminal force, or show of criminal force, the Central Government or any State Government or Parliament or the Legislature of any State, or any public servant in the exercise of the lawful power of such public servant; or (b) to resist the execution of any law, or of any legal process; or (c) to commit any mischief or criminal trespass, or other offence; or (d) by means of criminal force...",
+        "application": "Detected legal terms include crime, syndicate, continuing, unlawful. The retrieval layer returned BNS 111, BNS 146, BNS 189. The gateway route is BNS_PRIMARY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "BNS Section 111 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "BNS 111: (1) Any continuing unlawful activity including kidnapping, robbery, vehicle Organised theft, extortion, land grabbing (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 35)",
+          "BNS 146: Whoever unlawfully compels any person to labour against the will of that person, Unlawful (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 47)",
+          "BNS 189: Unlawful (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 54)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    },
+    {
+      "caseId": "blind-008",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-07-12",
+            "raw": "12 July 2024",
+            "context": "On 12 July 2024, death was allegedly caused by rash and negl"
+          }
+        ],
+        "offenseDate": "2024-07-12",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [],
+        "continuingSignal": false
+      },
+      "applicableRoute": "BNS_PRIMARY",
+      "routeMessage": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "bns-106",
+          "code": "BNS",
+          "section": "106",
+          "title": "Causing death",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 34,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "bns-281",
+          "code": "BNS",
+          "section": "281",
+          "title": "Rash driving",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 74,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "bns-282",
+          "code": "BNS",
+          "section": "282",
+          "title": "Whoever navigates any vessel in a manner so rash or negligent as to endanger",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 75,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-07-12.",
+        "rule": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context. Retrieved rule material: BNS Section 106 - (1) Whoever causes death of any person by doing any rash or negligent act not by negligence. amounting to culpable homicide, shall be punished with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine; and if such act is done by a registered medical practitioner while performing medical procedure, he shall be punished with imprisonment of either description for a term which may extend to two years, and shall also be liable to fine. Explanation.— For the purposes of this sub-section, “registered me... Important: Sub-section (2) is not commenced by S.O. 850(E). BNS Section 281 - Whoever drives any vehicle, or rides, on any public way in a manner so rash or or riding on a negligent as to endanger human life, or to be likely to cause hurt or injury to any other public way. person, shall be punished with imprisonment of either description for a term which may extend to six months, or with fine which may extend to one thousand rupees, or with both BNS Section 282 - Whoever navigates any vessel in a manner so rash or negligent as to endanger Rash navigation human life, or to be likely to cause hurt or injury to any other person, shall be punished with of vessel. imprisonment of either description for a term which may extend to six months, or with fine which may extend to ten thousand rupees, or with both",
+        "application": "The retrieval layer returned BNS 106, BNS 281, BNS 282. The gateway route is BNS_PRIMARY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "BNS Section 106 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "BNS 106: Causing death (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 34)",
+          "BNS 281: Rash driving (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 74)",
+          "BNS 282: Whoever navigates any vessel in a manner so rash or negligent as to endanger (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 75)"
+        ]
+      },
+      "verifier": {
+        "status": "NEEDS_REVIEW",
+        "warnings": [
+          "BNS 106: Sub-section (2) is not commenced by S.O. 850(E)."
+        ]
+      }
+    },
+    {
+      "caseId": "blind-009",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-06-20",
+            "raw": "20 June 2024",
+            "context": "On 20 June 2024, repeated unwanted following and electronic "
+          }
+        ],
+        "offenseDate": "2024-06-20",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [],
+        "continuingSignal": false
+      },
+      "applicableRoute": "IPC_ONLY",
+      "routeMessage": "The offense date is before July 1, 2024, so BNS provisions are blocked as the charging framework.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "ipc-385",
+          "code": "IPC",
+          "section": "385",
+          "title": "Putting person in fear of injury in order to commit extortion",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 156,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "ipc-386",
+          "code": "IPC",
+          "section": "386",
+          "title": "Extortion by putting a person in fear of death or grievous hurt",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 157,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "ipc-387",
+          "code": "IPC",
+          "section": "387",
+          "title": "Putting person in fear of death or of grievous hurt, in order to commit extortion",
+          "citation": {
+            "document": "The Indian Penal Code, 1860",
+            "authority": "Ministry of Home Affairs, Government of India",
+            "file": "ipc-1860-mha.pdf",
+            "page": 157,
+            "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-06-20.",
+        "rule": "The offense date is before July 1, 2024, so BNS provisions are blocked as the charging framework. Retrieved rule material: IPC Section 385 - Putting person in fear of injury in order to commit extortion.--Whoever, in order to the committing of extortion, puts any person in fear, or attempts to put any person in fear, of any injury, shall be punished with imprisonment of either description for a term which may extend to two years, or with fine, or with both IPC Section 386 - Extortion by putting a person in fear of death or grievous hurt.--Whoever commits extortion by putting any person in fear of death or of grievous hurt to that person or to any other, shall be punished with imprisonment of either description for a term which may extend to ten years, and shall also be liable to fine IPC Section 387 - Putting person in fear of death or of grievous hurt, in order to commit extortion.--Whoever in order to the committing of extortion, puts or attempts to put any person in fear of death or of grievous hurt to that person or to any other, shall be punished with imprisonment of either description for a term which may extend to seven years, and shall also be liable to fine",
+        "application": "The retrieval layer returned IPC 385, IPC 386, IPC 387. The gateway route is IPC_ONLY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "IPC Section 385 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "IPC 385: Putting person in fear of injury in order to commit extortion (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 156)",
+          "IPC 386: Extortion by putting a person in fear of death or grievous hurt (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 157)",
+          "IPC 387: Putting person in fear of death or of grievous hurt, in order to commit extortion (Ministry of Home Affairs, Government of India, ipc-1860-mha.pdf, p. 157)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    },
+    {
+      "caseId": "blind-010",
+      "extractedFacts": {
+        "dates": [
+          {
+            "value": "2024-07-12",
+            "raw": "12 July 2024",
+            "context": "On 12 July 2024, a person was wrongfully prevented from leav"
+          }
+        ],
+        "offenseDate": "2024-07-12",
+        "sections": [],
+        "sectionRefs": [],
+        "keywords": [],
+        "continuingSignal": true
+      },
+      "applicableRoute": "BNS_PRIMARY",
+      "routeMessage": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context.",
+      "reviewRequired": false,
+      "retrieved": [
+        {
+          "rank": 1,
+          "id": "bns-127",
+          "code": "BNS",
+          "section": "127",
+          "title": "(1) Whoever wrongfully restrains any person in such a manner as to prevent that",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 41,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 2,
+          "id": "bns-126",
+          "code": "BNS",
+          "section": "126",
+          "title": "(1) Whoever voluntarily obstructs any person so as to prevent that person from Wrongful",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 41,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        },
+        {
+          "rank": 3,
+          "id": "bns-142",
+          "code": "BNS",
+          "section": "142",
+          "title": "Wrongfully",
+          "citation": {
+            "document": "The Bharatiya Nyaya Sanhita, 2023",
+            "authority": "Gazette of India, Ministry of Law and Justice",
+            "file": "bns-2023-official-gazette.pdf",
+            "page": 46,
+            "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+          }
+        }
+      ],
+      "irac": {
+        "issue": "Determine the applicable statutory framework for a fact pattern dated 2024-07-12.",
+        "rule": "The offense date is on or after July 1, 2024, so BNS provisions are primary with controlled IPC cross-reference context. Retrieved rule material: BNS Section 127 - (1) Whoever wrongfully restrains any person in such a manner as to prevent that Wrongful person from proceedings beyond certain circumscribing limits, is said “wrongfully to confine” confinement. that person. Illustrations. (a) A causes Z to go within a walled space, and locks Z in. Z is thus prevented from proceeding in any direction beyond the circumscribing line of wall. A wrongfully confines Z. (b) A places men with firearms at the outlets of a building, and tells Z that they will fire at Z if Z attempts to leave the building. A wrongfully confines Z... BNS Section 126 - (1) Whoever voluntarily obstructs any person so as to prevent that person from Wrongful proceeding in any direction in which that person has a right to proceed, is said wrongfully to restraint. restrain that person. Exception.—The obstruction of a private way over land or water which a person in good faith believes himself to have a lawful right to obstruct, is not an offence within the meaning of this section. Illustration. A obstructs a path along which Z has a right to pass, A not believing in good faith that he has a right to stop the path. Z is ther... BNS Section 142 - Whoever, knowing that any person has been kidnapped or has been abducted, concealing or wrongfully conceals or confines such person, shall be punished in the same manner as if he keeping in had kidnapped or abducted such person with the same intention or knowledge, or for the confinement, kidnapped or same purpose as that with or for which he conceals or detains such person in confinement. abducted person",
+        "application": "The retrieval layer returned BNS 127, BNS 126, BNS 142. The gateway route is BNS_PRIMARY, so downstream synthesis is limited to the allowed corpus selection.",
+        "conclusion": "BNS Section 127 is the strongest retrieved candidate for this query. The answer remains bounded to the retrieved source text.",
+        "citations": [
+          "BNS 127: (1) Whoever wrongfully restrains any person in such a manner as to prevent that (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 41)",
+          "BNS 126: (1) Whoever voluntarily obstructs any person so as to prevent that person from Wrongful (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 41)",
+          "BNS 142: Wrongfully (Gazette of India, Ministry of Law and Justice, bns-2023-official-gazette.pdf, p. 46)"
+        ]
+      },
+      "verifier": {
+        "status": "PASSED",
+        "warnings": []
+      }
+    }
+  ],
+  "sealSha256": "2108fb3a1529a5efc3aeee113377b8365723167f17152e4d6255c5306a723155"
+}

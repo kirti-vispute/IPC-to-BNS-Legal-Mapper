@@ -1,0 +1,7 @@
+# Long Speech Trace Retry Plan
+
+2026-10-05. Original registered trace is retained unchanged and unusable: local Kernel-Power506/507 shows sleep07:43:49Z -> resume08:00:12Z; post-wait elapsed guard rejected completed response. Incremental events contain observations but are not an uninterrupted completed trial. Do not overwrite original observation/report or treat its aggregate zero as proof no windows hit the bound.
+
+One separately registered retry in `output/public-speech-validation/long-trace-retry-20261005/`. Keep identical assembly/body/model/production worker/inference settings. Register original34 input commitments plus retry wrapper/tests/this plan and original registration/events/observation/report. Reuse frozen worker and parent unchanged. A narrowly tested launcher redirects ONLY the frozen parent's exact diagnostic-worker command to this retry module, which selects the new output directory; all other subprocess calls forward unchanged. No production process/code or power policy is changed.
+
+Retain the original120s readiness/request limits, post-wait guard, event/UTC/elapsed checks and exclusive writes. Do not retry into occupied outputs or silently accept interrupted timing. No model tuning, reserved telephony holdout, new data, training, legal/UI/pipeline change or accuracy claim. Run full tests and existing legal checks; save separate results/integrity and update handover with evidence/remaining uncertainty.

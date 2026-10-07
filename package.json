@@ -1,0 +1,21 @@
+{
+  "name": "ipc-bns-neuro-symbolic-rag",
+  "version": "1.0.0",
+  "description": "Deterministic IPC to BNS statutory mapping prototype with temporal gating, lexical retrieval, and IRAC synthesis.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node backend/server.js",
+    "test": "node --test tests/*.test.js",
+    "build:corpus": "python scripts/build_legal_corpus.py",
+    "evaluate": "node scripts/evaluate_retrieval.mjs",
+    "evaluate:blind": "node scripts/run_blind_evaluation.mjs evaluation/cases/candidate-cases.jsonl evaluation/runs/blind-predictions.json",
+    "evaluate:score": "node scripts/score_blind_evaluation.mjs",
+    "build:official-references": "node scripts/build_official_source_references.mjs",
+    "evaluate:official": "node scripts/score_official_source_evaluation.mjs",
+    "verify:official-independence": "node scripts/verify_official_reference_independence.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

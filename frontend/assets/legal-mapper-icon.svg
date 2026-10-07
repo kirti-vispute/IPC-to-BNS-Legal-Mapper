@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+  <title>Legal Mapper</title>
+  <rect x="1" y="1" width="30" height="30" rx="5" fill="#176b55"/>
+  <path d="M16 9v15m-4 2h8M8 12h16m-16 0-4 7m4-7 4 7m12-7-4 7m4-7 4 7" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3 18h10v2a5 5 0 0 1-10 0v-2Zm16 0h10v2a5 5 0 0 1-10 0v-2Z" fill="#fff"/>
+  <path d="m21 10 3 2-3 2" stroke="#e4bc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="16" cy="7" r="1.8" fill="#e4bc77"/>
+</svg>

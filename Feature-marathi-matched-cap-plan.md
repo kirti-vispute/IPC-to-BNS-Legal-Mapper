@@ -1,0 +1,11 @@
+# Matched-Cap Marathi Diagnostic Plan
+
+Date: 2026-10-05. One offline comparison-design correction, no production change. Reuse all eight saved structured source rows and the same inspected shared feature arrays; reserved holdout is excluded.
+
+Register this plan/tool/tests, earlier registrations/reports/source and converted rows, all eight features, tokenizer, installed CT2 binary/version, and production protected hash baseline before inference. Verify previous registrations/current model identities. Source rows must have the exact Marathi/no-timestamp prefix and terminal EOS, length<=192; verify saved source text against the shared tokenizer.
+
+Converted uses existing CPU int8/four threads, same fixed prompt/beam3/patience1/length penalty1, blank suppression and observed general suppression. Only diagnostic max_length changes196->384. The versioned [CTranslate2 4.8.2 implementation](https://raw.githubusercontent.com/OpenNMT/CTranslate2/v4.8.2/src/models/whisper.cc) gives min(floor(cap/2), cap-3) with this special-token prompt;384 provides192 steps. Earlier cap4/12 one-token execution corroborated the bound. Source max_new_tokens remains192; no source rerun. Installed version and binary identity must match registration. No optional converted vocabulary buffer.
+
+Save each raw converted row immediately to an exclusive directory. Remove ONLY one terminal EOS for token comparison; never remove internal/special/text tokens or change text. Compare original raw equality, old EOS-normalized equality, new EOS-normalized equality, exact text equality, changed converted rows, and cap-hit counts. Verify all case identities/order and report failures honestly. No speech accuracy, timing, conversion corruption or model-switch claim. Eight inspected telephone calls are development diagnostics, not legal/expert labels. Prior source run slept; its timing is excluded. Distinct decoder implementations/arithmetic remain confounded.
+
+Run full existing tests, same-crosswalk mapping benchmark, separate current resolved replay, protected/registered hash checks, then update engineering documentation. Preserve all historical reports/failed attempts and app/UI/routing/retrieval/models/corpus/labels/methodology. Output is exclusive `output/public-speech-validation/marathi-matched-cap-20261005/`.

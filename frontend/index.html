@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IPC to BNS Legal Mapper</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2232%22%20height%3D%2232%22%20viewBox%3D%220%200%2032%2032%22%20fill%3D%22none%22%3E%0A%20%20%3Ctitle%3ELegal%20Mapper%3C%2Ftitle%3E%0A%20%20%3Crect%20x%3D%221%22%20y%3D%221%22%20width%3D%2230%22%20height%3D%2230%22%20rx%3D%225%22%20fill%3D%22%23176b55%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M16%209v15m-4%202h8M8%2012h16m-16%200-4%207m4-7%204%207m12-7-4%207m4-7%204%207%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M3%2018h10v2a5%205%200%200%201-10%200v-2Zm16%200h10v2a5%205%200%200%201-10%200v-2Z%22%20fill%3D%22%23fff%22%2F%3E%0A%20%20%3Cpath%20d%3D%22m21%2010%203%202-3%202%22%20stroke%3D%22%23e4bc77%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2216%22%20cy%3D%227%22%20r%3D%221.8%22%20fill%3D%22%23e4bc77%22%2F%3E%0A%3C%2Fsvg%3E" />
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/branding.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <img class="brand-mark" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2264%22%20height%3D%2264%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%0A%20%20%3Ctitle%3EIPC%20to%20BNS%20Legal%20Mapper%3C%2Ftitle%3E%0A%20%20%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2260%22%20height%3D%2260%22%20rx%3D%228%22%20fill%3D%22%23176b55%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M32%2016v32M24%2051h16M16%2023h32%22%20stroke%3D%22%23fff%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22m43%2019%205%204-5%204%22%20stroke%3D%22%23e4bc77%22%20stroke-width%3D%222.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%20%20%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%223%22%20fill%3D%22%23e4bc77%22%2F%3E%0A%20%20%3Cpath%20d%3D%22m16%2024-8%2012m8-12%208%2012m24-12-8%2012m8-12%208%2012%22%20stroke%3D%22%23fff%22%20stroke-width%3D%221.8%22%20stroke-linecap%3D%22round%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M7%2035h18v5a9%209%200%200%201-18%200v-5Zm32%200h18v5a9%209%200%200%201-18%200v-5Z%22%20fill%3D%22%23fff%22%2F%3E%0A%20%20%3Cpath%20d%3D%22M12%2039h8m-7%204h6m24-4h8m-7%204h6%22%20stroke%3D%22%23176b55%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E" width="64" height="64" alt="" aria-hidden="true" />
+          <div class="brand-copy">
+            <p class="eyebrow" data-interface-text="eyebrow">Neuro-symbolic statutory retrieval</p>
+            <h1>IPC to BNS Legal Mapper</h1>
+            <p class="subtitle" data-interface-text="subtitle">Date-aware statutory retrieval with citation-bound IRAC synthesis</p>
+          </div>
+        </div>
+        <div class="status" id="service-status" role="status">Checking service</div>
+      </header>
+
+      <nav class="workflow" aria-label="Analysis workflow">
+        <span><b>1</b> <span data-interface-text="workflowQuery">Query</span></span>
+        <span><b>2</b> <span data-interface-text="workflowDate">Date extraction</span></span>
+        <span><b>3</b> <span data-interface-text="workflowLaw">Applicable law</span></span>
+        <span><b>4</b> <span data-interface-text="workflowRetrieval">Retrieval</span></span>
+        <span><b>5</b> IRAC</span>
+      </nav>
+
+      <section class="query-panel" aria-labelledby="query-heading">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker" data-interface-text="workspace">Legal analysis workspace</p>
+            <h2 id="query-heading" data-interface-text="queryHeading">Natural-language legal query</h2>
+          </div>
+          <span class="input-state" id="input-state">Ready for analysis</span>
+        </div>
+        <label class="sr-only" for="query" data-interface-text="queryPrompt">Enter case facts or a legal query</label>
+        <textarea
+          id="query"
+          dir="auto"
+          spellcheck="true"
+          placeholder="Enter or paste the case facts, including the alleged offence date when available..."
+          data-interface-placeholder="queryPlaceholder"
+        ></textarea>
+        <span id="language-state" class="voice-state" role="status"></span>
+        <div class="input-language-row">
+          <label class="speech-language" for="input-language"><span data-interface-text="writtenLanguage">Written language</span>
+            <select id="input-language" aria-label="Written language">
+              <option value="auto" data-interface-text="autoDetect">Auto detect</option>
+              <option value="en">English</option>
+              <option value="hi">Hindi</option>
+              <option value="mr">Marathi</option>
+              <option value="gu">Gujarati</option>
+              <option value="bn">Bengali</option>
+              <option value="ta">Tamil</option>
+              <option value="te">Telugu</option>
+              <option value="kn">Kannada</option>
+              <option value="ml">Malayalam</option>
+              <option value="pa">Punjabi</option>
+              <option value="ur">Urdu</option>
+            </select>
+          </label>
+        </div>
+        <div class="actions">
+          <div class="voice-input">
+            <div class="voice-buttons">
+              <label class="speech-language" for="speech-language"><span data-interface-text="spokenLanguage">Spoken language</span>
+                <select id="speech-language" aria-label="Spoken language">
+                  <option value="auto" data-interface-text="autoDetect">Auto detect</option>
+                  <option value="hi">Hindi</option>
+                  <option value="mr">Marathi</option>
+                </select>
+              </label>
+              <button id="voice-btn" class="secondary-button" type="button" disabled>Start recording</button>
+              <button id="cancel-recording-btn" class="text-button" type="button" hidden>Cancel</button>
+            </div>
+            <span id="voice-state" class="voice-state" role="status">Checking voice input</span>
+          </div>
+          <button id="analyze-btn" type="button" data-interface-text="analyze">Analyze query</button>
+        </div>
+      </section>
+
+      <section class="results" aria-live="polite" aria-label="Analysis results">
+        <div class="decision-strip">
+          <div class="decision-item">
+            <span data-result-label="extractedDate">Extracted offence date</span>
+            <strong id="offense-date">Not analyzed</strong>
+          </div>
+          <div class="decision-item law-decision">
+            <span data-result-label="applicableLaw">Applicable law decision</span>
+            <strong id="route-pill" data-route="WAITING">Waiting</strong>
+          </div>
+          <div class="decision-item">
+            <span data-result-label="allowedCorpus">Allowed corpus</span>
+            <strong id="allowed-corpus">Not determined</strong>
+          </div>
+          <div class="decision-item">
+            <span data-result-label="groundingVerification">Grounding verifier</span>
+            <strong id="verifier-status">Not run</strong>
+          </div>
+          <p id="gate-message" class="law-explanation">Submit a legal query to determine the applicable statutory framework.</p>
+        </div>
+
+        <div class="result-grid">
+          <article class="panel retrieval-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker" data-interface-text="officialRetrieval">Official-source retrieval</p>
+                <h2 data-result-label="retrievedProvisions">Retrieved statutory provisions</h2>
+              </div>
+              <strong id="elapsed">Not run</strong>
+            </div>
+            <ol id="retrieval-list" class="retrieval-list">
+              <li class="empty">Retrieved provisions will appear after analysis.</li>
+            </ol>
+          </article>
+
+          <article class="panel warning-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker" data-result-label="humanReviewBoundary">Human review boundary</p>
+                <h2 data-result-label="reviewWarnings">Review warnings</h2>
+              </div>
+              <strong id="warning-count">0</strong>
+            </div>
+            <ul id="warning-list" class="warning-list">
+              <li class="empty">Warnings and unresolved conditions will appear here.</li>
+            </ul>
+          </article>
+
+          <article class="panel irac-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="section-kicker" data-result-label="citationBoundReasoning">Citation-bound reasoning</p>
+                <h2 data-interface-text="iracSynthesis">IRAC synthesis</h2>
+              </div>
+              <strong id="citation-count">0 sources</strong>
+            </div>
+            <div id="irac-output" class="irac-output">
+              <p class="empty">Issue, rule, application, and conclusion will appear after analysis.</p>
+            </div>
+            <div id="irac-citations" class="irac-citations" hidden></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="demo-section" aria-labelledby="demo-heading">
+        <details>
+          <summary id="demo-heading" data-interface-text="demoHeading">Evaluation / Demo Cases</summary>
+          <div class="demo-content">
+            <p data-interface-text="demoDescription">Classroom test inputs for demonstrating temporal routing and review states. These are not user-facing legal categories.</p>
+            <div class="demo-list">
+              <button type="button" class="demo-case" data-sample="pre" data-interface-text="demoPre">Pre-transition theft</button>
+              <button type="button" class="demo-case" data-sample="post" data-interface-text="demoPost">Post-transition organized crime</button>
+              <button type="button" class="demo-case" data-sample="span" data-interface-text="demoSpan">Continuing offense</button>
+              <button type="button" class="demo-case" data-sample="missing" data-interface-text="demoMissing">Missing date</button>
+            </div>
+          </div>
+        </details>
+      </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>

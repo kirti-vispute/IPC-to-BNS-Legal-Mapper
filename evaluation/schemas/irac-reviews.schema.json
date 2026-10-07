@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Completed Expert Citation and IRAC Review",
+  "type": "object",
+  "required": ["caseId", "citationCorrectness", "iracAccuracy", "grounding", "expertComments"],
+  "properties": {
+    "caseId": { "type": "string", "minLength": 1 },
+    "citationCorrectness": { "enum": ["CORRECT", "PARTIALLY_CORRECT", "INCORRECT"] },
+    "iracAccuracy": {
+      "type": "object",
+      "required": ["issue", "rule", "application", "conclusion"],
+      "properties": {
+        "issue": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "rule": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "application": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "conclusion": { "type": "integer", "minimum": 0, "maximum": 2 }
+      },
+      "additionalProperties": false
+    },
+    "grounding": { "enum": ["GROUNDED", "PARTIALLY_GROUNDED", "UNGROUNDED"] },
+    "expertComments": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "ipc-354d",
+    "code": "IPC",
+    "section": "354D",
+    "title": "Stalking",
+    "text": "354D. Stalking.\u2014(1) Any man who\u2014 (i) follows a woman and contacts, or attempts to contact such woman to foster personal interaction repeatedly despite a clear indication of disinterest by such woman; or (ii) monitors the use by a woman of the internet, email or any other form of electronic communication, commits the offence of stalking: Provided that such conduct shall not amount to stalking if the man who pursued it proves that\u2014 (i) it was pursued for the purpose of preventing or detecting crime and the man accused of stalking had been entrusted with the responsibility of prevention and detection of crime by the State; or (ii) it was pursued under any law or to comply with any condition or requirement imposed by any person under any law; or (iii) in the particular circumstances such conduct was reasonable and justified. (2) Whoever commits the offence of stalking shall be punished on first conviction with imprisonment of either description for a term which may extend to three years, and shall also be liable to fine; and be punished on a second or subsequent conviction, with imprisonment of either description for a term which may extend to five years, and shall also be liable to fine.]",
+    "keywords": [
+      "stalking",
+      "follows",
+      "contacts",
+      "woman",
+      "repeatedly",
+      "disinterest",
+      "monitors",
+      "internet",
+      "email",
+      "electronic",
+      "communication"
+    ],
+    "mapsTo": [
+      "bns-78"
+    ],
+    "recordType": "primary-statute-supplement",
+    "source": {
+      "document": "The Indian Penal Code, 1860 (official consolidated PDF)",
+      "authority": "National Commission for Women, Government of India",
+      "file": "supplements/ipc-ncw.pdf",
+      "page": 80,
+      "endPage": 81,
+      "url": "https://cdn.ncw.gov.in/wp-content/uploads/2022/12/THEINDIANPENALCODE1860_0.pdf",
+      "sha256": "39a9a403de2a50ff9424d6a874f6fcca209272d466addd35157e809e501e8d7f"
+    }
+  }
+]

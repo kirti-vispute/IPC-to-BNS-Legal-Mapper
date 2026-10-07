@@ -1,0 +1,433 @@
+{
+  "evaluationType": "OFFICIAL_SOURCE_REFERENCE_EVALUATION",
+  "validationStatus": "NOT_INDEPENDENT_LAWYER_VALIDATION",
+  "disclaimer": "This report compares system output with research references derived from official-source text in the local corpus. It is not lawyer validation, expert validation, legal advice, or a measure of correctness in real cases.",
+  "generatedAt": "2026-10-01T09:55:18.874Z",
+  "predictionSealSha256": "2108fb3a1529a5efc3aeee113377b8365723167f17152e4d6255c5306a723155",
+  "predictionFileSha256": "869c7f716261a2080592ba53f06f2e5e86c9907e78309607d5661e645252e91d",
+  "referenceFileSha256": "8a83149a1d86c7f958fe9f7542805b3ae8bee87d3679a53f09e5e01f1e6d71a9",
+  "totalCases": 10,
+  "referenceCoverage": {
+    "applicableLawEligibleCases": 9,
+    "provisionTop1EligibleCases": 5,
+    "provisionTop3EligibleCases": 5,
+    "citationEligibleCases": 5,
+    "requiresExpertReviewCases": [
+      "blind-003",
+      "blind-005",
+      "blind-006",
+      "blind-008",
+      "blind-009"
+    ]
+  },
+  "metrics": {
+    "applicableLawAccuracyPercent": 100,
+    "provisionTop1AccuracyPercent": 40,
+    "acceptableTop3AnyHitPercent": 40,
+    "acceptableProvisionRecallAt3Percent": 33.33,
+    "exactTop1CitationAccuracyPercent": 40,
+    "iracAccuracyPercent": null
+  },
+  "claimsSupported": [
+    "Accuracy of the deterministic pipeline against the documented official-source references on eligible fields in these 10 synthetic cases.",
+    "Identification of retrieval errors and coverage gaps relative to the approved local government-source corpus.",
+    "Reproducible route, provision, and exact source-page comparison with unresolved cases excluded from ineligible denominators."
+  ],
+  "claimsNotSupported": [
+    "Independent lawyer or professor validation.",
+    "Legal correctness for real disputes, charging decisions, or court use.",
+    "General model accuracy outside these 10 synthetic cases.",
+    "IRAC legal quality, because no independent IRAC reference or expert review exists.",
+    "Correctness for records marked requires expert review."
+  ],
+  "cases": [
+    {
+      "caseId": "blind-001",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      },
+      "predictedApplicableLaw": "IPC_ONLY",
+      "referenceApplicableLaw": "IPC_ONLY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "IPC-403",
+      "referenceTop1Provision": "IPC-378",
+      "top1Correct": false,
+      "predictedTop3Provisions": [
+        "IPC-403",
+        "IPC-404",
+        "IPC-92"
+      ],
+      "acceptableProvisions": [
+        "IPC-378",
+        "IPC-379"
+      ],
+      "matchedAcceptableProvisions": [],
+      "matchedAcceptableCount": 0,
+      "acceptableCount": 2,
+      "top3AnyHit": false,
+      "predictedTop1Citation": {
+        "file": "ipc-1860-mha.pdf",
+        "pdfPage": 161
+      },
+      "referenceTop1Citation": {
+        "file": "ipc-1860-mha.pdf",
+        "pdfPage": 152
+      },
+      "top1CitationCorrect": false,
+      "briefJustification": "The alleged conduct predates BNS commencement. The stated elements track IPC section 378 directly; section 379 is an acceptable associated punishment provision."
+    },
+    {
+      "caseId": "blind-002",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      },
+      "predictedApplicableLaw": "BNS_PRIMARY",
+      "referenceApplicableLaw": "BNS_PRIMARY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "BNS-314",
+      "referenceTop1Provision": "BNS-303",
+      "top1Correct": false,
+      "predictedTop3Provisions": [
+        "BNS-314",
+        "BNS-129",
+        "BNS-320"
+      ],
+      "acceptableProvisions": [
+        "BNS-303"
+      ],
+      "matchedAcceptableProvisions": [],
+      "matchedAcceptableCount": 0,
+      "acceptableCount": 1,
+      "top3AnyHit": false,
+      "predictedTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 83
+      },
+      "referenceTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 78
+      },
+      "top1CitationCorrect": false,
+      "briefJustification": "The alleged conduct is after BNS commencement, and the stated elements track BNS section 303(1)."
+    },
+    {
+      "caseId": "blind-003",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": true,
+      "expertReviewReason": "A unique homicide provision requires additional facts or expert legal characterization.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      },
+      "predictedApplicableLaw": "IPC_ONLY",
+      "referenceApplicableLaw": "IPC_ONLY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "IPC-88",
+      "referenceTop1Provision": null,
+      "top1Correct": null,
+      "predictedTop3Provisions": [
+        "IPC-88",
+        "IPC-225",
+        "IPC-314"
+      ],
+      "acceptableProvisions": [
+        "IPC-299",
+        "IPC-300"
+      ],
+      "matchedAcceptableProvisions": [],
+      "matchedAcceptableCount": 0,
+      "acceptableCount": 2,
+      "top3AnyHit": null,
+      "predictedTop1Citation": {
+        "file": "ipc-1860-mha.pdf",
+        "pdfPage": 29
+      },
+      "referenceTop1Citation": null,
+      "top1CitationCorrect": null,
+      "briefJustification": "The date fixes the IPC framework, but the short facts do not address the circumstances and exceptions needed to choose uniquely between IPC sections 299 and 300."
+    },
+    {
+      "caseId": "blind-004",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      },
+      "predictedApplicableLaw": "BNS_PRIMARY",
+      "referenceApplicableLaw": "BNS_PRIMARY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "BNS-314",
+      "referenceTop1Provision": "BNS-318",
+      "top1Correct": false,
+      "predictedTop3Provisions": [
+        "BNS-314",
+        "BNS-320",
+        "BNS-322"
+      ],
+      "acceptableProvisions": [
+        "BNS-318"
+      ],
+      "matchedAcceptableProvisions": [],
+      "matchedAcceptableCount": 0,
+      "acceptableCount": 1,
+      "top3AnyHit": false,
+      "predictedTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 83
+      },
+      "referenceTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 86
+      },
+      "top1CitationCorrect": false,
+      "briefJustification": "The alleged conduct is after BNS commencement. BNS section 318(1) and (4) directly address deception followed by dishonest inducement to deliver property."
+    },
+    {
+      "caseId": "blind-005",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": true,
+      "expertReviewReason": "The cross-commencement treatment and unique Top-1 provision require expert analysis of the alleged continuing conduct.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      },
+      "predictedApplicableLaw": "MULTI_PERIOD_REVIEW",
+      "referenceApplicableLaw": "MULTI_PERIOD_REVIEW",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "IPC-420",
+      "referenceTop1Provision": null,
+      "top1Correct": null,
+      "predictedTop3Provisions": [
+        "IPC-420",
+        "BNS-101",
+        "IPC-239"
+      ],
+      "acceptableProvisions": [
+        "IPC-415",
+        "IPC-420",
+        "BNS-318"
+      ],
+      "matchedAcceptableProvisions": [
+        "IPC-420"
+      ],
+      "matchedAcceptableCount": 1,
+      "acceptableCount": 3,
+      "top3AnyHit": null,
+      "predictedTop1Citation": {
+        "file": "ipc-1860-mha.pdf",
+        "pdfPage": 169
+      },
+      "referenceTop1Citation": null,
+      "top1CitationCorrect": null,
+      "briefJustification": "The stated period crosses BNS commencement. Both IPC and BNS cheating provisions are textually relevant, but the authoritative texts alone do not determine offence completion or charging treatment for this fact pattern."
+    },
+    {
+      "caseId": "blind-006",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": true,
+      "expertReviewReason": "The occurrence date is a legally material missing fact.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      },
+      "predictedApplicableLaw": "CLARIFY",
+      "referenceApplicableLaw": "CLARIFY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": null,
+      "referenceTop1Provision": null,
+      "top1Correct": null,
+      "predictedTop3Provisions": [],
+      "acceptableProvisions": [],
+      "matchedAcceptableProvisions": [],
+      "matchedAcceptableCount": 0,
+      "acceptableCount": 0,
+      "top3AnyHit": null,
+      "predictedTop1Citation": null,
+      "referenceTop1Citation": null,
+      "top1CitationCorrect": null,
+      "briefJustification": "The facts omit the date, so the official commencement and savings materials do not permit selection of IPC or BNS. A date clarification is required before ranking a provision."
+    },
+    {
+      "caseId": "blind-007",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      },
+      "predictedApplicableLaw": "BNS_PRIMARY",
+      "referenceApplicableLaw": "BNS_PRIMARY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "BNS-111",
+      "referenceTop1Provision": "BNS-111",
+      "top1Correct": true,
+      "predictedTop3Provisions": [
+        "BNS-111",
+        "BNS-146",
+        "BNS-189"
+      ],
+      "acceptableProvisions": [
+        "BNS-111"
+      ],
+      "matchedAcceptableProvisions": [
+        "BNS-111"
+      ],
+      "matchedAcceptableCount": 1,
+      "acceptableCount": 1,
+      "top3AnyHit": true,
+      "predictedTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 35
+      },
+      "referenceTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 35
+      },
+      "top1CitationCorrect": true,
+      "briefJustification": "The case is post-commencement and expressly invokes an organised crime syndicate and continuing unlawful activity, making BNS section 111 the objective retrieval target. Whether every offence element is proved is outside this retrieval label."
+    },
+    {
+      "caseId": "blind-008",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": true,
+      "expertReviewReason": "The specifically matching subsection was not commenced by the available notification; a unique applicable-law and Top-1 answer cannot be assigned from this corpus alone.",
+      "eligibility": {
+        "applicableLaw": false,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      },
+      "predictedApplicableLaw": "BNS_PRIMARY",
+      "referenceApplicableLaw": null,
+      "applicableLawCorrect": null,
+      "predictedTop1Provision": "BNS-106",
+      "referenceTop1Provision": null,
+      "top1Correct": null,
+      "predictedTop3Provisions": [
+        "BNS-106",
+        "BNS-281",
+        "BNS-282"
+      ],
+      "acceptableProvisions": [
+        "BNS-106"
+      ],
+      "matchedAcceptableProvisions": [
+        "BNS-106"
+      ],
+      "matchedAcceptableCount": 1,
+      "acceptableCount": 1,
+      "top3AnyHit": null,
+      "predictedTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 34
+      },
+      "referenceTop1Citation": null,
+      "top1CitationCorrect": null,
+      "briefJustification": "The facts track BNS section 106(2), but the official commencement notification expressly excludes that subsection from commencement. The local official-source set does not resolve the resulting charging question or law outside this corpus."
+    },
+    {
+      "caseId": "blind-009",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": true,
+      "expertReviewReason": "A unique Top-1 label is withheld because material statutory facts and primary IPC section text are unavailable in the approved local source set.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      },
+      "predictedApplicableLaw": "IPC_ONLY",
+      "referenceApplicableLaw": "IPC_ONLY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "IPC-385",
+      "referenceTop1Provision": null,
+      "top1Correct": null,
+      "predictedTop3Provisions": [
+        "IPC-385",
+        "IPC-386",
+        "IPC-387"
+      ],
+      "acceptableProvisions": [
+        "IPC-354D"
+      ],
+      "matchedAcceptableProvisions": [],
+      "matchedAcceptableCount": 0,
+      "acceptableCount": 1,
+      "top3AnyHit": null,
+      "predictedTop1Citation": {
+        "file": "ipc-1860-mha.pdf",
+        "pdfPage": 156
+      },
+      "referenceTop1Citation": null,
+      "top1CitationCorrect": null,
+      "briefJustification": "The date fixes the IPC framework and the official chart identifies IPC section 354D as the stalking provision. However, the case omits facts material to the statutory formulation, and the local corpus lacks primary IPC section 354D text."
+    },
+    {
+      "caseId": "blind-010",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      },
+      "predictedApplicableLaw": "BNS_PRIMARY",
+      "referenceApplicableLaw": "BNS_PRIMARY",
+      "applicableLawCorrect": true,
+      "predictedTop1Provision": "BNS-127",
+      "referenceTop1Provision": "BNS-127",
+      "top1Correct": true,
+      "predictedTop3Provisions": [
+        "BNS-127",
+        "BNS-126",
+        "BNS-142"
+      ],
+      "acceptableProvisions": [
+        "BNS-127"
+      ],
+      "matchedAcceptableProvisions": [
+        "BNS-127"
+      ],
+      "matchedAcceptableCount": 1,
+      "acceptableCount": 1,
+      "top3AnyHit": true,
+      "predictedTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 41
+      },
+      "referenceTop1Citation": {
+        "file": "bns-2023-official-gazette.pdf",
+        "pdfPage": 41
+      },
+      "top1CitationCorrect": true,
+      "briefJustification": "The alleged conduct is post-commencement and directly tracks the basic wrongful-confinement rule in BNS section 127(1), with section 127(2) as the associated punishment."
+    }
+  ]
+}

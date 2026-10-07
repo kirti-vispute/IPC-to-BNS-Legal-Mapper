@@ -1,0 +1,88 @@
+/* Generated SVG copies avoid requiring a new server MIME type; originals live in assets/. */
+:root {
+  --brand-cursor-default: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2228%22%20height%3D%2228%22%20viewBox%3D%220%200%2028%2028%22%20fill%3D%22none%22%3E%0A%20%20%3Cg%20stroke%3D%22%23fff%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M14%205v18m-4%201h8M6%2010h16M6%2010l-4%207h8l-4-7Zm16%200-4%207h8l-4-7Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M2%2017h8a4%204%200%200%201-8%200Zm16%200h8a4%204%200%200%201-8%200Z%22%20fill%3D%22%23fff%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2214%22%20cy%3D%223%22%20r%3D%221.4%22%20fill%3D%22%23176b55%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Cg%20stroke%3D%22%23176b55%22%20stroke-width%3D%221.7%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M14%205v18m-4%201h8M6%2010h16M6%2010l-4%207h8l-4-7Zm16%200-4%207h8l-4-7Z%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M2%2017h8a4%204%200%200%201-8%200Zm16%200h8a4%204%200%200%201-8%200Z%22%20fill%3D%22%23176b55%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2214%22%20cy%3D%223%22%20r%3D%221.4%22%20fill%3D%22%23176b55%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E") 14 3, auto;
+  --brand-cursor-active: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2230%22%20height%3D%2230%22%20viewBox%3D%220%200%2030%2030%22%20fill%3D%22none%22%3E%0A%20%20%3Cg%20transform%3D%22translate(1%201)%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%0A%20%20%20%20%3Cg%20stroke%3D%22%23fff%22%20stroke-width%3D%224%22%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M14%205v18m-4%201h8M6%2010h16M6%2010l-4%207h8l-4-7Zm16%200-4%207h8l-4-7Z%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M2%2017h8a4%204%200%200%201-8%200Zm16%200h8a4%204%200%200%201-8%200Z%22%20fill%3D%22%23fff%22%2F%3E%0A%20%20%20%20%20%20%3Ccircle%20cx%3D%2214%22%20cy%3D%223%22%20r%3D%221.4%22%20fill%3D%22%23a76717%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cg%20stroke%3D%22%23105540%22%20stroke-width%3D%221.7%22%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M14%205v18m-4%201h8M6%2010l-4%207h8l-4-7Zm16%200-4%207h8l-4-7Z%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M2%2017h8a4%204%200%200%201-8%200Zm16%200h8a4%204%200%200%201-8%200Z%22%20fill%3D%22%23105540%22%2F%3E%0A%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%3Cpath%20d%3D%22M6%2010h16m-3-3%203%203-3%203%22%20stroke%3D%22%23a76717%22%20stroke-width%3D%221.7%22%2F%3E%0A%20%20%20%20%3Ccircle%20cx%3D%2214%22%20cy%3D%223%22%20r%3D%221.4%22%20fill%3D%22%23a76717%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E") 15 4, pointer;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.brand-mark {
+  flex: 0 0 64px;
+  width: 64px;
+  height: 64px;
+}
+
+.brand-copy {
+  min-width: 0;
+}
+
+/* Native SVG cursors need no pointer tracking or overlay and keep platform fallbacks. */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) {
+  body {
+    cursor: var(--brand-cursor-default);
+  }
+
+  :is(p, h1, h2, h3, li, small, strong, span, label),
+  :is(textarea, input:not([type="checkbox"]):not([type="radio"]), [contenteditable="true"]) {
+    cursor: text;
+  }
+
+  :is(button, a[href], summary, input[type="checkbox"], input[type="radio"]),
+  :is(button, a[href], summary) * {
+    cursor: var(--brand-cursor-active);
+  }
+
+  :is(button:disabled, input:disabled, [aria-disabled="true"]),
+  :is(button:disabled, input:disabled, [aria-disabled="true"]) * {
+    cursor: not-allowed;
+  }
+
+  #analyze-btn:disabled {
+    cursor: progress;
+  }
+
+  [draggable="true"] {
+    cursor: grab;
+  }
+
+  [draggable="true"]:active {
+    cursor: grabbing;
+  }
+}
+
+/* Reduced-motion and high-contrast users get familiar native cursors. */
+@media (prefers-reduced-motion: reduce) {
+  body, :is(button, a[href], summary, input[type="checkbox"], input[type="radio"]),
+  :is(button, a[href], summary) * {
+    cursor: auto;
+  }
+
+  :is(button:not(:disabled), a[href], summary, input[type="checkbox"], input[type="radio"]),
+  :is(button:not(:disabled), a[href], summary) * {
+    cursor: pointer;
+  }
+
+  :is(button:disabled, input:disabled, [aria-disabled="true"]) { cursor: not-allowed; }
+  #analyze-btn:disabled { cursor: progress; }
+}
+
+@media (max-width: 560px) {
+  .brand-block {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .brand-mark {
+    flex-basis: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media print {
+  body, body * { cursor: auto !important; }
+}

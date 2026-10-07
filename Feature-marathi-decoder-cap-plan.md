@@ -1,0 +1,7 @@
+# Verified One-New-Token Comparison
+
+Date: 2026-10-05. Same inspected feature and decoder prefixes; preserve all previous registered reports/failures. Raw16 conditions completed without errors and revealed cap1 gives no new tokens, initial cap5 returns two new tokens, divergence cap10 returns only five supplied text tokens.
+
+Primary reference: https://raw.githubusercontent.com/OpenNMT/CTranslate2/v4.8.2/src/models/whisper.cc (generate/check_prompts/decode). It sets start_step=3 for this four-special-token prefix and caps decoding by min(floor(max_length/2), max_length-start_step). Returned hypotheses include supplied text tokens. This explains the observed cap behavior. Package version alone is not proof the installed binary was built from this source; verify selected caps through execution.
+
+Preregister tool/test/plan and preceding observation hashes. Initial cap4 should allow one new token; common-five-text-token prefix cap12 should return those five plus one new token. Run beam1/3 with observed/empty general suppression, blank suppression retained, same CPU int8/four threads/features; record raw sequences and errors immediately. Compare continuation only after verifying the supplied text prefix. Reuse frozen source rows, no source rerun, optional vocabulary storage, holdout, production change or timing/accuracy claim. Exclusive `output/public-speech-validation/marathi-decoder-cap-20261005/`.

@@ -1,0 +1,18 @@
+{
+  "purpose": "Separate official-source supplement; original corpus/manifest and sealed evaluation remain frozen.",
+  "retrievedOn": "2026-10-02",
+  "sources": [
+    {
+      "document": "The Indian Penal Code, 1860 (official consolidated PDF)",
+      "authority": "National Commission for Women, Government of India",
+      "file": "supplements/ipc-ncw.pdf",
+      "page": 80,
+      "endPage": 81,
+      "url": "https://cdn.ncw.gov.in/wp-content/uploads/2022/12/THEINDIANPENALCODE1860_0.pdf",
+      "sha256": "39a9a403de2a50ff9424d6a874f6fcca209272d466addd35157e809e501e8d7f"
+    }
+  ],
+  "recordsFile": "backend/data/statute-supplements.json",
+  "recordsSha256": "017b663fb73ee979394244bd1470a25f53cba4c8ffbec580b93243799fa764de",
+  "extraction": "IPC 354D only, PDF pages 80-81; full exceptions and punishment retained; printed page81 header removed; missing punctuation glyphs normalized to spaces."
+}

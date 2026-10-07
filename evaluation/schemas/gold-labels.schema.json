@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Completed Blind IPC-BNS Gold Label",
+  "type": "object",
+  "required": ["caseId", "applicableLaw", "correctTop1Provision", "correctTop3Provisions", "expertComments"],
+  "properties": {
+    "caseId": { "type": "string", "minLength": 1 },
+    "applicableLaw": { "enum": ["IPC_ONLY", "BNS_PRIMARY", "MULTI_PERIOD_REVIEW", "CLARIFY"] },
+    "correctTop1Provision": {
+      "oneOf": [
+        { "$ref": "#/$defs/provision" },
+        { "type": "null" }
+      ]
+    },
+    "correctTop3Provisions": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/provision" }
+    },
+    "expertComments": { "type": "string" }
+  },
+  "$defs": {
+    "provision": {
+      "type": "object",
+      "required": ["code", "section"],
+      "properties": {
+        "code": { "enum": ["IPC", "BNS"] },
+        "section": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

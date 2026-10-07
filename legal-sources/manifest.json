@@ -1,0 +1,51 @@
+{
+  "policy": "Only official Government of India legal publications are accepted.",
+  "generatedFrom": [
+    {
+      "file": "ipc-1860-mha.pdf",
+      "title": "The Indian Penal Code, 1860",
+      "authority": "Ministry of Home Affairs, Government of India",
+      "url": "https://www.mha.gov.in/sites/default/files/2025-11/5IPC1860_27022023.pdf",
+      "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197"
+    },
+    {
+      "file": "bns-2023-official-gazette.pdf",
+      "title": "The Bharatiya Nyaya Sanhita, 2023",
+      "authority": "Gazette of India, Ministry of Law and Justice",
+      "url": "https://www.mha.gov.in/sites/default/files/2026-02/1_250883_english_01042024.pdf",
+      "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4"
+    },
+    {
+      "file": "bns-commencement-gazette-2024.pdf",
+      "title": "BNS Commencement Notification S.O. 850(E)",
+      "authority": "Gazette of India, Ministry of Home Affairs",
+      "url": "https://www.mha.gov.in/sites/default/files/BhartiyaNyayaSanhita_24022024.pdf",
+      "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9"
+    },
+    {
+      "file": "ipc-bns-comparative-chart-bprd.pdf",
+      "title": "Comparative Chart of Commonly Used Sections of IPC vis-a-vis BNS",
+      "authority": "Bureau of Police Research and Development, Ministry of Home Affairs, Government of India",
+      "url": "https://bprd.nic.in/uploads/pdf/BNS_English_30-04-2024.pdf",
+      "sha256": "58f019069584deab712768ecb4eaf0bb76aabf48e522754752f8e693a3ac4814"
+    }
+  ],
+  "recordCounts": {
+    "IPCActSections": 536,
+    "BNSActSections": 358,
+    "mappingOnlyReferences": 7,
+    "officialMappings": 104
+  },
+  "commencementRule": {
+    "BNS": "2024-07-01",
+    "exception": "BNS 106(2)",
+    "source": {
+      "document": "BNS Commencement Notification S.O. 850(E)",
+      "authority": "Gazette of India, Ministry of Home Affairs",
+      "file": "bns-commencement-gazette-2024.pdf",
+      "page": 1,
+      "url": "https://www.mha.gov.in/sites/default/files/BhartiyaNyayaSanhita_24022024.pdf",
+      "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9"
+    }
+  }
+}

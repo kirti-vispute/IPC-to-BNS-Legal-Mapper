@@ -1,0 +1,16 @@
+{
+  "verificationType": "PROCEDURAL_INDEPENDENCE_CHECK",
+  "scope": "Checks the reference-label builder's file-read boundary, declared creation inputs, prediction seal, immutable prediction-file checksum, and report/reference linkage. This is a reproducibility check, not an external audit or expert validation.",
+  "independentFromModelPredictionsWithinImplementedWorkflow": true,
+  "checks": {
+    "builderReadsOnlyDeclaredReferenceInputs": true,
+    "declaredCreationInputsMatchAllowlist": true,
+    "blindPredictionInternalSealValid": true,
+    "blindPredictionFileChecksumUnchanged": true,
+    "reportLinkedToCurrentReferenceFile": true
+  },
+  "blindPredictionFileSha256": "869c7f716261a2080592ba53f06f2e5e86c9907e78309607d5661e645252e91d",
+  "blindPredictionInternalSealSha256": "2108fb3a1529a5efc3aeee113377b8365723167f17152e4d6255c5306a723155",
+  "officialReferenceFileSha256": "8a83149a1d86c7f958fe9f7542805b3ae8bee87d3679a53f09e5e01f1e6d71a9",
+  "reportFileSha256": "d858a2e6f0a0a73d64022066a69253b6a3ba24582703d2b7b420c1d1eacd505e"
+}

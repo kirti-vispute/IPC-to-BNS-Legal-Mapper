@@ -1,0 +1,9 @@
+.venv-speech/
+.venv-translation/
+models/speech/
+models/translation/
+.voice-rollback/
+__pycache__/
+*.pyc
+# Generated diagnostics, local test data, recordings, and benchmark outputs.
+output/

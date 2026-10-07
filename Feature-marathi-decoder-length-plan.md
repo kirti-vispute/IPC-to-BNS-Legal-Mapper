@@ -1,0 +1,5 @@
+# Converted Decoder Length Semantics
+
+Date: 2026-10-05. Same logical prefix diagnostic. Two frozen attempts exposed diagnostic assumptions: optional NULL logits and an incorrect one-token output-length assertion. Preserve both attempts/source rows. New tool records actual returned tokens, without reading optional vocabulary storage or assuming cap semantics.
+
+Use identical inspected shared mr-30 features, initial/common-five-token prefixes, beam1/3, observed/empty general suppression, blank suppression true. Compare max_length=1 against max_length=len(prefix)+1, record returned token counts/scores or per-row errors for all16 conditions. A genuine one-generated-token row must be established from actual results, not API wording. Reuse completed source evidence; no source rerun. Register this plan/tool and previous registration/source/failure evidence before execution. Exclusive `output/public-speech-validation/marathi-decoder-length-20261005/`. No production, holdout or speed/accuracy claim. Vocabulary distribution comparison remains unavailable unless separately evidenced.

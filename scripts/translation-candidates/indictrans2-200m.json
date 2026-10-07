@@ -1,0 +1,23 @@
+{
+  "modelId": "ai4bharat/indictrans2-indic-en-dist-200M",
+  "revision": "eb9e49d81077cfc5311e82ff36d8c1fc11557b5d",
+  "metadataSource": "https://huggingface.co/api/models/ai4bharat/indictrans2-indic-en-dist-200M?blobs=true",
+  "checkedDate": "2026-10-03",
+  "license": "mit",
+  "gated": "auto",
+  "requiredFiles": {
+    "LICENSE": {"size": 1128, "gitBlob": "03070285be3aab2c5603737115bb71df3f7bbdf5"},
+    "README.md": {"size": 4781, "gitBlob": "b5da22fee2cbf97ee6c62680b9cd89ceb957d5a4"},
+    "config.json": {"size": 1370, "gitBlob": "35405f014dd62747bf5e6e6bb073df7d28b2e1a0"},
+    "configuration_indictrans.py": {"size": 14155, "gitBlob": "110d923f8fffda96398f05c30e00f94e341670ec"},
+    "dict.SRC.json": {"size": 3391208, "gitBlob": "417a049588f7d60df9b64b6735f79aa92fbe2e50"},
+    "dict.TGT.json": {"size": 644755, "gitBlob": "c02436a9fc89002a6aa0a9756d8fb7d74dc1c66c"},
+    "generation_config.json": {"size": 163, "gitBlob": "542cc0f13b067a9bd56e0334c422a1e51de28e19"},
+    "model.SRC": {"size": 3256903, "sha256": "ac9257c8e76b8b607705b959cc3d075656ea33032f7a974e467b8941df6e98d4"},
+    "model.TGT": {"size": 759425, "gitBlob": "4841e2bc6e5116de279437e88fe9bcaa7656f813"},
+    "model.safetensors": {"size": 913353672, "sha256": "a9bff20ae94712db41c8dc99d2e381eb456ddccbcd48cb2c7cf077ccc5bc58d8"},
+    "modeling_indictrans.py": {"size": 79785, "gitBlob": "efbe438f6f1e8f57bd0652e9458f2755adb87900"},
+    "tokenization_indictrans.py": {"size": 8044, "gitBlob": "53c9be07a1dda3273ed8c2af4f30b635edff4b31"},
+    "tokenizer_config.json": {"size": 1105, "gitBlob": "4d12aafc2cf58013deeffe761d6930af826949cb"}
+  }
+}

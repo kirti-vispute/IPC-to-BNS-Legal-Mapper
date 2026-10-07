@@ -1,0 +1,664 @@
+{
+  "evaluationType": "OFFICIAL_SOURCE_REFERENCE_EVALUATION",
+  "validationStatus": "NOT_INDEPENDENT_LAWYER_VALIDATION",
+  "disclaimer": "These labels are research references derived from official-source text in the local corpus. They are not lawyer-prepared labels, legal advice, or independent expert validation.",
+  "independenceMethod": "The label builder reads only candidate-cases.jsonl, statutes.json, and legal-sources/manifest.json. It does not import, read, or accept blind-predictions.json.",
+  "permittedCreationInputs": [
+    {
+      "path": "evaluation/cases/candidate-cases.jsonl",
+      "sha256": "65369f727585453b1a694029b5159c037de42630cfbbac3c895328cbbf7dba36"
+    },
+    {
+      "path": "backend/data/statutes.json",
+      "sha256": "53cca6ae20a0521638bd5f455f98ac4fa37bb89aaf1daf30fccb9c3ab598c988"
+    },
+    {
+      "path": "legal-sources/manifest.json",
+      "sha256": "2fa9c6b343bbeecf97477fdf8fe499644d32b8ece59b44e4731df3709e4b1ef5"
+    }
+  ],
+  "sourcePolicy": "Only official Government of India legal publications are accepted.",
+  "totalCases": 10,
+  "fullyResolvedProvisionReferences": 5,
+  "requiresExpertReviewCases": [
+    "blind-003",
+    "blind-005",
+    "blind-006",
+    "blind-008",
+    "blind-009"
+  ],
+  "records": [
+    {
+      "caseId": "blind-001",
+      "caseText": "On 20 June 2024, property was dishonestly moved out of another person's possession without consent.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "dishonest intention",
+        "movable property",
+        "movement from another person's possession",
+        "absence of consent"
+      ],
+      "applicableLaw": "IPC_ONLY",
+      "referenceTop1": {
+        "code": "IPC",
+        "section": "378",
+        "title": "Theft"
+      },
+      "acceptable": [
+        {
+          "code": "IPC",
+          "section": "378",
+          "title": "Theft"
+        },
+        {
+          "code": "IPC",
+          "section": "379",
+          "title": "Punishment for theft"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 152,
+          "section": "IPC 378",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 378 states the defining elements reflected in the case facts."
+        },
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 154,
+          "section": "IPC 379",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 379 supplies the general punishment for theft."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 102,
+          "section": "BNS 358",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "The repeal-and-savings clause preserves liabilities and proceedings for offences committed under the repealed IPC."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The alleged conduct predates BNS commencement. The stated elements track IPC section 378 directly; section 379 is an acceptable associated punishment provision.",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      }
+    },
+    {
+      "caseId": "blind-002",
+      "caseText": "On 12 July 2024, movable property was dishonestly taken from another person's possession without consent.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "dishonest intention",
+        "movable property",
+        "taking from another person's possession",
+        "absence of consent"
+      ],
+      "applicableLaw": "BNS_PRIMARY",
+      "referenceTop1": {
+        "code": "BNS",
+        "section": "303",
+        "title": "Theft"
+      },
+      "acceptable": [
+        {
+          "code": "BNS",
+          "section": "303",
+          "title": "Theft"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 78,
+          "section": "BNS 303",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 303 contains both the definition and general punishment for theft."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The alleged conduct is after BNS commencement, and the stated elements track BNS section 303(1).",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      }
+    },
+    {
+      "caseId": "blind-003",
+      "caseText": "The alleged act occurred on 18 June 2024 and intentionally caused another person's death.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "causation of death",
+        "intention",
+        "circumstances relevant to murder clauses and exceptions"
+      ],
+      "applicableLaw": "IPC_ONLY",
+      "referenceTop1": null,
+      "acceptable": [
+        {
+          "code": "IPC",
+          "section": "299",
+          "title": "Culpable homicide"
+        },
+        {
+          "code": "IPC",
+          "section": "300",
+          "title": "Murder"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 119,
+          "section": "IPC 299",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 299 covers causing death with intention to cause death."
+        },
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 120,
+          "section": "IPC 300",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 300 distinguishes murder and contains fact-dependent exceptions."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 102,
+          "section": "BNS 358",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "The repeal-and-savings clause preserves IPC liability for pre-commencement conduct."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The date fixes the IPC framework, but the short facts do not address the circumstances and exceptions needed to choose uniquely between IPC sections 299 and 300.",
+      "requiresExpertReview": true,
+      "expertReviewReason": "A unique homicide provision requires additional facts or expert legal characterization.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      }
+    },
+    {
+      "caseId": "blind-004",
+      "caseText": "On 12 July 2024, a person was deceived and dishonestly induced to deliver property.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "deception",
+        "dishonest inducement",
+        "delivery of property"
+      ],
+      "applicableLaw": "BNS_PRIMARY",
+      "referenceTop1": {
+        "code": "BNS",
+        "section": "318",
+        "title": "Cheating"
+      },
+      "acceptable": [
+        {
+          "code": "BNS",
+          "section": "318",
+          "title": "Cheating"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 86,
+          "section": "BNS 318",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 318(1) defines cheating and section 318(4) addresses dishonest inducement to deliver property."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The alleged conduct is after BNS commencement. BNS section 318(1) and (4) directly address deception followed by dishonest inducement to deliver property.",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      }
+    },
+    {
+      "caseId": "blind-005",
+      "caseText": "A deceptive course of conduct continued from 20 June 2024 until 12 July 2024 and caused delivery of property.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "start and end dates",
+        "whether the conduct is legally continuing",
+        "when the offence was completed",
+        "deception",
+        "dishonest inducement",
+        "delivery of property"
+      ],
+      "applicableLaw": "MULTI_PERIOD_REVIEW",
+      "referenceTop1": null,
+      "acceptable": [
+        {
+          "code": "IPC",
+          "section": "415",
+          "title": "Cheating"
+        },
+        {
+          "code": "IPC",
+          "section": "420",
+          "title": "Cheating and dishonestly inducing delivery of property"
+        },
+        {
+          "code": "BNS",
+          "section": "318",
+          "title": "Cheating"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 167,
+          "section": "IPC 415",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 415 defines cheating under IPC."
+        },
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 169,
+          "section": "IPC 420",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 420 addresses cheating that dishonestly induces delivery of property."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 86,
+          "section": "BNS 318",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 318 contains the BNS cheating provisions."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 102,
+          "section": "BNS 358",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "The repeal-and-savings clause preserves pre-commencement IPC liabilities."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The stated period crosses BNS commencement. Both IPC and BNS cheating provisions are textually relevant, but the authoritative texts alone do not determine offence completion or charging treatment for this fact pattern.",
+      "requiresExpertReview": true,
+      "expertReviewReason": "The cross-commencement treatment and unique Top-1 provision require expert analysis of the alleged continuing conduct.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      }
+    },
+    {
+      "caseId": "blind-006",
+      "caseText": "A complaint alleges dishonest inducement and delivery of property, but does not state when the conduct occurred.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date or period of alleged conduct",
+        "deception",
+        "dishonest inducement",
+        "delivery of property"
+      ],
+      "applicableLaw": "CLARIFY",
+      "referenceTop1": null,
+      "acceptable": [],
+      "sources": [
+        {
+          "document": "The Indian Penal Code, 1860",
+          "authority": "Ministry of Home Affairs, Government of India",
+          "file": "ipc-1860-mha.pdf",
+          "pdfPage": 169,
+          "section": "IPC 420",
+          "sha256": "f25d61547212f152dda8c96b19ac05a286f3a9eb6a95490ab55ec40aa4f53197",
+          "support": "Section 420 is a potentially relevant pre-commencement provision."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 86,
+          "section": "BNS 318",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 318 is a potentially relevant post-commencement provision."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 102,
+          "section": "BNS 358",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "The repeal-and-savings clause makes timing material to the governing framework."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The facts omit the date, so the official commencement and savings materials do not permit selection of IPC or BNS. A date clarification is required before ranking a provision.",
+      "requiresExpertReview": true,
+      "expertReviewReason": "The occurrence date is a legally material missing fact.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      }
+    },
+    {
+      "caseId": "blind-007",
+      "caseText": "On 12 July 2024, a crime syndicate carried out continuing unlawful activity involving repeated serious offences.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "organised crime syndicate",
+        "continuing unlawful activity",
+        "serious predicate offences",
+        "remaining statutory elements"
+      ],
+      "applicableLaw": "BNS_PRIMARY",
+      "referenceTop1": {
+        "code": "BNS",
+        "section": "111",
+        "title": "Organised crime"
+      },
+      "acceptable": [
+        {
+          "code": "BNS",
+          "section": "111",
+          "title": "Organised crime"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 35,
+          "section": "BNS 111",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 111 defines organised crime, organised crime syndicate, and continuing unlawful activity."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The case is post-commencement and expressly invokes an organised crime syndicate and continuing unlawful activity, making BNS section 111 the objective retrieval target. Whether every offence element is proved is outside this retrieval label.",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      }
+    },
+    {
+      "caseId": "blind-008",
+      "caseText": "On 12 July 2024, death was allegedly caused by rash and negligent driving and the driver left without reporting the incident.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "rash or negligent driving",
+        "causation of death",
+        "departure without reporting",
+        "commencement status of BNS section 106(2)",
+        "potentially applicable law outside the corpus"
+      ],
+      "applicableLaw": null,
+      "referenceTop1": null,
+      "acceptable": [
+        {
+          "code": "BNS",
+          "section": "106",
+          "title": "Causing death by negligence"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 34,
+          "section": "BNS 106",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 106(1) addresses negligent causing of death; section 106(2) text addresses negligent driving followed by failure to report."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The facts track BNS section 106(2), but the official commencement notification expressly excludes that subsection from commencement. The local official-source set does not resolve the resulting charging question or law outside this corpus.",
+      "requiresExpertReview": true,
+      "expertReviewReason": "The specifically matching subsection was not commenced by the available notification; a unique applicable-law and Top-1 answer cannot be assigned from this corpus alone.",
+      "eligibility": {
+        "applicableLaw": false,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      }
+    },
+    {
+      "caseId": "blind-009",
+      "caseText": "On 20 June 2024, repeated unwanted following and electronic monitoring caused fear and distress.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "repeated following",
+        "electronic monitoring",
+        "sex of accused and target",
+        "indication of disinterest",
+        "statutory exceptions"
+      ],
+      "applicableLaw": "IPC_ONLY",
+      "referenceTop1": null,
+      "acceptable": [
+        {
+          "code": "IPC",
+          "section": "354D",
+          "title": "Stalking"
+        }
+      ],
+      "sources": [
+        {
+          "document": "Comparative Chart of Commonly Used Sections of IPC vis-a-vis BNS",
+          "authority": "Bureau of Police Research and Development, Ministry of Home Affairs, Government of India",
+          "file": "ipc-bns-comparative-chart-bprd.pdf",
+          "pdfPage": 22,
+          "section": "IPC 354D",
+          "sha256": "58f019069584deab712768ecb4eaf0bb76aabf48e522754752f8e693a3ac4814",
+          "support": "The official comparative chart identifies IPC section 354D as stalking and maps it to BNS section 78."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 28,
+          "section": "BNS 78",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "BNS section 78 provides the corresponding element structure and demonstrates why the omitted facts are material."
+        },
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 102,
+          "section": "BNS 358",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "The repeal-and-savings clause preserves IPC liability for pre-commencement conduct."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The date fixes the IPC framework and the official chart identifies IPC section 354D as the stalking provision. However, the case omits facts material to the statutory formulation, and the local corpus lacks primary IPC section 354D text.",
+      "requiresExpertReview": true,
+      "expertReviewReason": "A unique Top-1 label is withheld because material statutory facts and primary IPC section text are unavailable in the approved local source set.",
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": false,
+        "top3": false,
+        "citation": false
+      }
+    },
+    {
+      "caseId": "blind-010",
+      "caseText": "On 12 July 2024, a person was wrongfully prevented from leaving a confined place.",
+      "labelType": "OFFICIAL_SOURCE_REFERENCE_LABEL",
+      "factsNeedingReference": [
+        "date of alleged conduct",
+        "wrongful prevention from leaving",
+        "circumscribed limits",
+        "duration or aggravating purpose if any"
+      ],
+      "applicableLaw": "BNS_PRIMARY",
+      "referenceTop1": {
+        "code": "BNS",
+        "section": "127",
+        "title": "Wrongful confinement"
+      },
+      "acceptable": [
+        {
+          "code": "BNS",
+          "section": "127",
+          "title": "Wrongful confinement"
+        }
+      ],
+      "sources": [
+        {
+          "document": "The Bharatiya Nyaya Sanhita, 2023",
+          "authority": "Gazette of India, Ministry of Law and Justice",
+          "file": "bns-2023-official-gazette.pdf",
+          "pdfPage": 41,
+          "section": "BNS 127",
+          "sha256": "c9da896e7a16c481a46235789f74f545b7a9ed7f3a5c8049d0b1b9252c6731f4",
+          "support": "Section 127(1) defines wrongful confinement and section 127(2) gives the basic punishment."
+        },
+        {
+          "document": "BNS Commencement Notification S.O. 850(E)",
+          "authority": "Gazette of India, Ministry of Home Affairs",
+          "file": "bns-commencement-gazette-2024.pdf",
+          "pdfPage": 2,
+          "section": "Notification S.O. 850(E)",
+          "sha256": "dfcd5df23fb711f2996959b13ee6ff6bd32ed38be1e1f2d1c820cbba86e2a8c9",
+          "support": "Appoints 1 July 2024 as the commencement date for BNS, except BNS section 106(2)."
+        }
+      ],
+      "justification": "The alleged conduct is post-commencement and directly tracks the basic wrongful-confinement rule in BNS section 127(1), with section 127(2) as the associated punishment.",
+      "requiresExpertReview": false,
+      "expertReviewReason": null,
+      "eligibility": {
+        "applicableLaw": true,
+        "top1": true,
+        "top3": true,
+        "citation": true
+      }
+    }
+  ]
+}

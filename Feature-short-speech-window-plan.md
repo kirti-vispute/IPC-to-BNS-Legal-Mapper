@@ -1,0 +1,15 @@
+# Offline15-Second Marathi Window Candidate
+
+2026-10-05. One offline comparison; no production deployment. No Git repository; baseline231 JavaScript/58 Python tests. Confirmed long stress input reaches224 tokens, emits an incomplete character and advances a whole30s window. Short-clip fidelity remains unresolved.
+
+Reuse only verified saved30s baselines: successful `long-trace-retry-20261005` plus eight inspected `segment-diagnostic-20261004` rows. Original sleep-invalidated trace is excluded as a baseline but preserved. Register plan/tool/tests, scoring helper, all prior input hashes, saved rows/reports/events, both fixture manifests/audio and protected baseline before inference. Reconstruct identical registered60.0460625s WAV body. Reserved telephony8 are excluded.
+
+Candidate ONLY sets `chunk_length=15` in a diagnostic adapter around actual production `recognize`. Existing Marathi model CPUint8/four threads, selected Marathi, beam3, temperature0, default VAD, context=false and other defaults remain identical. A fresh candidate-only model/child serves all nine inputs in frozen order; no default30s calls mix into its mutable feature-extractor state. No website/library/model files, power policy, legal or UI changes.
+
+Save generation/split/emission/VAD events immediately with case ID/UTC/elapsed; save each response separately as raw JSONL. Check actual1500-frame window limit, full positive seek continuation, unchanged prompts/options/VAD durations,120s per-response deadline/clock drift, bounded Kernel-Power506/507 records and input hashes. Always terminate/join worker; preserve interrupted/failed evidence without overwriting occupied outputs. No speed comparison: baselines were recorded earlier and model readiness differs.
+
+Compare nine complete matched identities: long bound-hit counts, raw/emitted U+FFFD counts, seek/timestamp spans, original text and short exact text parity8/8. Reuse `benchmark_speech_decode.score` NFKC/punctuation-normalized dataset-reference CER/WER for the long repeated recording only. Record literal normalized phrase-occurrence counts for the four supplied source transcripts, including overcounts; do not invent synonyms or infer exact acoustic word-loss timing. These read-speech reference metrics are not independent legal/expert labels or natural-language accuracy. Do not silently retune after observing results.
+
+Candidate is eligible for further validation only if all integrity/execution gates pass, all eight short transcripts are identical, long cap hits/malformed emitted characters decrease, no previously matched literal phrase family decreases or overcounts, and stress-reference edit distances do not worsen. Eligibility is NOT deployment approval or a guarantee for faster/dense/spontaneous speech. Unexpected boundary omissions/duplication require investigation even if cap hits fall.
+
+Run full tests, same-crosswalk mapping benchmark and separate current resolved replay; verify protected/registered identities/holdout absence. Document evidence, remaining risks, exact next single task and rollback/retirement guidance. Do not implement the candidate in production in this task.
