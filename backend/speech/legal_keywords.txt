@@ -1,0 +1,20 @@
+# Words Whistle should favour when an English recording is transcribed (keyword biasing).
+# One word or short phrase per line; blank lines and lines starting with '#' are ignored.
+# Keep this list short and specific: favouring a word makes it likelier to appear, so only list
+# terms that really occur in the legal questions people ask. Re-test after any change.
+IPC
+BNS
+BNSS
+CrPC
+Indian Penal Code
+Bharatiya Nyaya Sanhita
+section
+sections
+theft
+cheating
+robbery
+extortion
+dishonest intention
+movable property
+without consent
+criminal breach of trust

@@ -4,7 +4,7 @@ import { extname, join, normalize } from "node:path";
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 
-import { analyzeMultilingualQuery, createStreamingTranslationWorker } from "./core/multilingual.js";
+import { analyzeMultilingualQuery, createStreamingTranslationWorker, translateDisplayText } from "./core/multilingual.js";
 import { getCorpus } from "./core/retriever.js";
 import { MAX_AUDIO_BYTES, speechStatus, transcribeAudio } from "./core/transcriber.js";
 
@@ -51,6 +51,11 @@ const server = http.createServer(async (req, res) => {
       return sendJson(res, await analyzeMultilingualQuery(query, { originalLanguage: body.originalLanguage,
         inputMode: body.inputMode, inputLanguage: body.inputLanguage, languageProbability: body.languageProbability,
         languageSource: body.languageSource, originalInput: body.originalInput, worker: translationWorker }));
+    }
+
+    if (req.method === "POST" && url.pathname === "/api/translate") {
+      const body = await readJson(req);
+      return sendJson(res, await translateDisplayText(body.text, { source: body.source, target: body.target, worker: translationWorker }));
     }
 
     if (req.method === "POST" && url.pathname === "/api/transcribe") {

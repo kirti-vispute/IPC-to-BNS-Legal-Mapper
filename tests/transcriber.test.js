@@ -34,8 +34,10 @@ test("rejects empty, oversized, unsupported audio and invalid mode before local 
   ]) assert.throws(() => validateAudioInput(audio, type, mode), e => e.code === code);
 });
 
-test("selected recording language is limited to Hindi or Marathi", () => {
-  assert.equal(validateAudioInput(Buffer.from("x"), "audio/webm", "transcribe", "hi").selectedLanguage, "hi");
+test("selected recording language is limited to the five supported spoken languages", () => {
+  for (const language of ["en", "hi", "mr", "ur", "gu"]) {
+    assert.equal(validateAudioInput(Buffer.from("x"), "audio/webm", "transcribe", language).selectedLanguage, language);
+  }
   assert.equal(validateAudioInput(Buffer.from("x"), "audio/webm", "transcribe", "auto").selectedLanguage, null);
   assert.throws(() => validateAudioInput(Buffer.from("x"), "audio/webm", "transcribe", "fr"), e => e.code === "UNSUPPORTED_SPEECH_LANGUAGE");
 });
@@ -79,9 +81,10 @@ test("converted Marathi vocabulary format is accepted and missing both Marathi m
     runner: () => { throw Error("must not use another model"); } }), error => error.code === "MODEL_MISSING");
 });
 
-test("selected Hindi alone uses the local medium model and a longer worker deadline", async () => {
+test("selected Hindi falls back to the pinned medium model when the tuned model is absent, with a longer deadline", async () => {
   let used;
-  const result = await transcribeAudio({ ...input, language: "hi", runner: async options => {
+  const exists = path => !path.includes("hindi-medium-ct2");
+  const result = await transcribeAudio({ ...input, language: "hi", exists, runner: async options => {
     used = options;
     return { text: "चोरी हुई", originalLanguage: "ur", languageProbability: 0.4 };
   } });
@@ -92,6 +95,24 @@ test("selected Hindi alone uses the local medium model and a longer worker deadl
   assert.equal(result.inputLanguage, "hi");
   assert.equal(result.detectedLanguage, "ur");
   assert.equal(result.languageProbability, null);
+});
+
+test("selected Hindi prefers the validated tuned model when installed", async () => {
+  let used;
+  const result = await transcribeAudio({ ...input, language: "hi", runner: async options => {
+    used = options;
+    return { text: "चोरी हुई", originalLanguage: "hi" };
+  } });
+  assert.match(used.config.modelPath, /hindi-medium-ct2$/);
+  assert.equal(used.timeoutMs, 180_000);
+  assert.match(result.model, /Hindi-tuned/);
+});
+
+test("an explicit Hindi model override beats the tuned default", async () => {
+  const config = { python: "python", modelPath: "tiny", hindiModelPath: "custom-hindi", hindiTunedModelPath: null };
+  let used;
+  await transcribeAudio({ ...input, language: "hi", config, runner: async options => { used = options.config; return { text: "चोरी हुई" }; } });
+  assert.equal(used.modelPath, "custom-hindi");
 });
 
 test("missing Hindi model fails without downgrading to Marathi or Auto", async () => {
@@ -309,4 +330,107 @@ test("concurrent local model requests are bounded rather than queued indefinitel
   await assert.rejects(transcribeAudio({ ...input }), e => e.code === "SPEECH_BUSY");
   finish({ text: "Complete" });
   await pending;
+});
+
+test("selected English uses the Whistle engine with its own worker and pinned model folder", async () => {
+  let used;
+  const result = await transcribeAudio({ ...input, language: "en", runner: async options => {
+    used = options;
+    return { text: legalText, originalLanguage: "en", languageProbability: null };
+  } });
+  assert.match(used.config.modelPath, /models.speech.whistle$/);
+  assert.match(used.config.worker, /whistle_worker\.py$/);
+  assert.equal(used.config.selectedLanguage, "en");
+  assert.equal(used.timeoutMs, 120_000);
+  assert.equal(result.model, "Cactus Whistle (local CPU)");
+  assert.equal(result.languageSource, "user-selected");
+  assert.equal(result.languageProbability, null);
+  assert.equal(result.inputLanguage, "en");
+});
+
+test("selected English falls back to the tiny model when Whistle is not installed", async () => {
+  const config = { python: "python", modelPath: "tiny", whistleModelPath: "whistle" };
+  const exists = path => !path.includes("whistle") || path.endsWith("whistle_worker.py");
+  assert.equal(speechStatus(config, exists).whistleReady, false);
+  let used;
+  const result = await transcribeAudio({ ...input, language: "en", config, exists, runner: async options => {
+    used = options.config;
+    return { text: legalText, originalLanguage: "en" };
+  } });
+  assert.equal(used.modelPath, "tiny");
+  assert.equal(used.worker, undefined);
+  assert.match(result.model, /faster-whisper-tiny/);
+});
+
+test("Whistle readiness needs both the weights and a platform engine library", () => {
+  const config = { python: "python", modelPath: "tiny", whistleModelPath: "whistle" };
+  assert.equal(speechStatus(config, path => path.endsWith("whistle.cact") || path.endsWith("libneedle.dll")).whistleReady, true);
+  assert.equal(speechStatus(config, path => path.endsWith("libneedle.so") || path.endsWith("whistle.cact")).whistleReady, true);
+  assert.equal(speechStatus(config, path => path.endsWith("whistle.cact")).whistleReady, false);
+  assert.equal(speechStatus(config, path => path.endsWith("libneedle.dll")).whistleReady, false);
+});
+
+test("selected Urdu and Gujarati use their tuned local models with the long deadline", async () => {
+  for (const [language, folder, label] of [["ur", /urdu-large-v3-ct2$/, /Urdu-tuned/], ["gu", /gujarati-medium-ct2$/, /Gujarati-tuned/]]) {
+    let used;
+    const result = await transcribeAudio({ ...input, language, runner: async options => {
+      used = options;
+      return { text: "متن", originalLanguage: "fa", languageProbability: 0.3 };
+    } });
+    assert.match(used.config.modelPath, folder);
+    assert.equal(used.config.selectedLanguage, language);
+    assert.equal(used.config.worker, undefined);
+    assert.equal(used.timeoutMs, 180_000);
+    assert.match(result.model, label);
+    assert.equal(result.inputLanguage, language);
+    assert.equal(result.languageProbability, null);
+    assert.equal(result.detectedLanguage, "fa");
+  }
+});
+
+test("missing Urdu or Gujarati model fails closed instead of using a generic Whisper model", async () => {
+  const config = { python: "python", modelPath: "tiny", indicModelPath: "small", urduModelPath: "urdu", gujaratiModelPath: "gujarati" };
+  const exists = path => !path.includes("urdu") && !path.includes("gujarati");
+  assert.equal(speechStatus(config, exists).urduModelReady, false);
+  assert.equal(speechStatus(config, exists).gujaratiModelReady, false);
+  for (const language of ["ur", "gu"]) {
+    await assert.rejects(transcribeAudio({ ...input, language, config, exists,
+      runner: () => { throw Error("must not use another model"); } }), error => error.code === "MODEL_MISSING");
+  }
+});
+
+test("converted CTranslate2 folders with vocabulary.json are ready for Hindi, Urdu and Gujarati", () => {
+  const config = { python: "python", modelPath: "tiny", hindiModelPath: "hindi", urduModelPath: "urdu", gujaratiModelPath: "gujarati" };
+  const converted = path => !path.endsWith("vocabulary.txt");
+  const status = speechStatus(config, converted);
+  assert.deepEqual([status.hindiModelReady, status.urduModelReady, status.gujaratiModelReady], [true, true, true]);
+});
+
+test("a validated Hindi-tuned folder is labelled honestly when selected through the override path", async () => {
+  const config = { python: "python", modelPath: "tiny", hindiModelPath: "models/speech/hindi-medium-ct2" };
+  const result = await transcribeAudio({ ...input, language: "hi", config,
+    runner: async () => ({ text: "चोरी हुई", originalLanguage: "hi" }) });
+  assert.match(result.model, /Hindi-tuned/);
+});
+
+test("Whistle and Whisper selections never share a streaming worker process", async () => {
+  const spawned = [];
+  const runner = createStreamingRecognizer((_exe, args) => {
+    spawned.push(args[0]);
+    const child = new EventEmitter();
+    child.stdin = new PassThrough();
+    child.stdout = new PassThrough();
+    child.stderr = new PassThrough();
+    child.kill = () => queueMicrotask(() => child.emit("close", -1));
+    child.stdin.on("data", () => queueMicrotask(() => child.stdout.write(JSON.stringify({ text: "ok" }) + "\n")));
+    return child;
+  });
+  const base = { bytes: Buffer.from("audio"), mode: "transcribe", timeoutMs: 1000 };
+  await runner({ ...base, config: { python: "p", modelPath: "whistle", selectedLanguage: "en", worker: "whistle_worker.py" } });
+  await runner({ ...base, config: { python: "p", modelPath: "whistle", selectedLanguage: "en", worker: "whistle_worker.py" } });
+  await runner({ ...base, config: { python: "p", modelPath: "urdu", selectedLanguage: "ur" } });
+  assert.equal(spawned.length, 2);
+  assert.match(spawned[0], /whistle_worker\.py$/);
+  assert.match(spawned[1], /transcribe\.py$/);
+  runner.close();
 });

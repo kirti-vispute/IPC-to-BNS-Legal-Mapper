@@ -27,6 +27,7 @@ let microphoneRequest = 0;
 let voiceInput = null;
 let recordingLanguage = "auto";
 
+const MAX_QUERY_CHARS = 4000;
 const MAX_RECORDING_MS = 90_000;
 const MIN_RECORDING_MS = 500;
 
@@ -53,7 +54,11 @@ const elements = {
   iracCitations: document.querySelector("#irac-citations"),
   citationCount: document.querySelector("#citation-count"),
   warningList: document.querySelector("#warning-list"),
-  warningCount: document.querySelector("#warning-count")
+  warningCount: document.querySelector("#warning-count"),
+  queryCount: document.querySelector("#query-count"),
+  robot: document.querySelector("#robot-stage"),
+  results: document.querySelector(".results"),
+  workflow: document.querySelector(".workflow")
 };
 const resultLabelDefaults = Array.from(document.querySelectorAll("[data-result-label]"), node => ({ node, text: node.textContent }));
 const interfaceTextDefaults = Array.from(document.querySelectorAll("[data-interface-text]"), node => ({ node, text: node.textContent }));
@@ -93,6 +98,119 @@ function resetPresentationLabels() {
   });
 }
 
+// "idle" hides the empty result panels; "ready" shows a finished (or failed) analysis.
+function setStage(stage) {
+  if (elements.results) elements.results.dataset.state = stage;
+  if (elements.workflow) elements.workflow.dataset.stage = stage;
+}
+
+function updateQueryCount() {
+  if (!elements.queryCount) return;
+  const length = elements.query.value.length;
+  elements.queryCount.textContent = `${length} / ${MAX_QUERY_CHARS}`;
+  elements.queryCount.dataset.state = length > MAX_QUERY_CHARS ? "over" : length > MAX_QUERY_CHARS * 0.9 ? "near" : "ok";
+}
+
+// While speech is being converted to text a small robot carries the audio in, listens and types it up.
+// The transcript is held back until the loop in progress has finished, so the animation never cuts off mid-gesture.
+function showRobot(visible) {
+  if (elements.robot) elements.robot.hidden = !visible;
+  elements.query.readOnly = visible;
+  elements.query.dataset.busy = String(visible);
+}
+
+async function finishRobotLoop() {
+  const running = elements.robot?.getAnimations?.({ subtree: true }) || [];
+  let loop = null;
+  for (const animation of running) {
+    const timing = animation.effect?.getComputedTiming?.();
+    if (timing && Number.isFinite(timing.duration) && timing.iterations === Infinity && (!loop || timing.duration > loop.duration)) {
+      loop = { animation, duration: timing.duration };
+    }
+  }
+  if (!loop) return;
+  const elapsed = Number(loop.animation.currentTime) % loop.duration;
+  await new Promise((resolve) => setTimeout(resolve, Math.max(0, loop.duration - elapsed)));
+}
+
+function revealResults() {
+  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  elements.results?.scrollIntoView?.({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+}
+
+// Changing the written language translates the text already in the box; an empty box is left alone.
+// The first text is kept as the base, so choosing another language translates the original (no compounding
+// errors) and choosing the original language again restores it exactly. Editing the text discards the base.
+let writtenSelection = elements.inputLanguage?.value || "auto";
+let translationBase = null;
+let translationBusy = false;
+
+function setTranslating(isBusy, message) {
+  translationBusy = isBusy;
+  analysisBusy = isBusy;
+  elements.query.readOnly = isBusy;
+  elements.analyze.disabled = isBusy || voiceBusy;
+  elements.speechLanguage.disabled = isBusy || voiceBusy;
+  if (elements.inputLanguage) elements.inputLanguage.disabled = isBusy || voiceBusy;
+  refreshVoiceAvailability(true);
+  elements.inputState.textContent = message;
+}
+
+function showTranslationNote(message, kind) {
+  if (!elements.languageState) return;
+  elements.languageState.textContent = message;
+  elements.languageState.dataset.kind = "translation";
+  if (kind) elements.languageState.dataset.state = kind;
+  else elements.languageState.removeAttribute("data-state");
+}
+
+async function onWrittenLanguageChange() {
+  const previous = writtenSelection;
+  const target = elements.inputLanguage.value || "auto";
+  writtenSelection = target;
+  const current = elements.query.value;
+  if (translationBusy || !current.trim() || target === "auto") return;
+  const base = translationBase && translationBase.shown === current ? translationBase : { text: current, language: "auto", shown: current };
+  const name = elements.inputLanguage.selectedOptions?.[0]?.textContent || target;
+  setTranslating(true, `Translating to ${name}...`);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 120_000);
+  let message = activeInterfaceText?.ready || "Ready for analysis";
+  try {
+    const response = await fetch("/api/translate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: base.text, source: base.language, target }),
+      signal: controller.signal
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Translation failed.");
+    if (lastAnalyzedQuery) markResultsStale();
+    voiceInput = null;
+    clearSpeechReviewNotice();
+    if (data.changed) {
+      elements.query.value = data.text;
+      translationBase = { text: base.text, language: data.sourceLanguage, shown: data.text };
+      showTranslationNote(`Machine translation to ${name}. Check dates, names and section numbers before analyzing.`, "warning");
+      message = "Translated - review, then analyze";
+    } else {
+      elements.query.value = base.text;
+      translationBase = { text: base.text, language: data.sourceLanguage, shown: base.text };
+      showTranslationNote(`The text is already in ${name}.`);
+    }
+    updateQueryCount();
+  } catch (error) {
+    elements.inputLanguage.value = previous;
+    writtenSelection = previous;
+    showTranslationNote(error.name === "AbortError" ? "Translation timed out. Your text is unchanged." : `${error.message} Your text is unchanged.`, "error");
+  } finally {
+    clearTimeout(timer);
+    setTranslating(false, message);
+    elements.inputLanguage.focus?.();
+  }
+}
+
+elements.inputLanguage?.addEventListener("change", onWrittenLanguageChange);
 elements.analyze.addEventListener("click", analyze);
 elements.voice.addEventListener("click", toggleRecording);
 elements.cancelRecording.addEventListener("click", cancelRecording);
@@ -100,6 +218,13 @@ elements.query.addEventListener("keydown", (event) => {
   if ((event.ctrlKey || event.metaKey) && event.key === "Enter") analyze();
 });
 elements.query.addEventListener("input", () => {
+  updateQueryCount();
+  if (translationBase && elements.query.value !== translationBase.shown) translationBase = null;
+  if (elements.languageState?.dataset.kind === "translation") {
+    elements.languageState.textContent = "";
+    elements.languageState.removeAttribute("data-kind");
+    elements.languageState.removeAttribute("data-state");
+  }
   if (!elements.query.value.trim()) {
     voiceInput = null;
     clearSpeechReviewNotice();
@@ -111,6 +236,7 @@ elements.demoButtons.forEach((button) => {
     voiceInput = null;
     clearSpeechReviewNotice();
     elements.query.value = samples[button.dataset.sample];
+    updateQueryCount();
     elements.inputLanguage.value = "auto";
     markResultsStale("Demo case loaded · analyze to refresh results");
     elements.query.focus();
@@ -153,11 +279,8 @@ async function toggleRecording() {
   }
 
   setVoiceBusy(true, "Requesting microphone...");
-  const spokenLanguage = elements.speechLanguage.value || "auto";
-  const writtenLanguage = elements.inputLanguage?.value || "auto";
-  // Honor an explicit supported input language when the separate speech selector is still Auto.
-  recordingLanguage = spokenLanguage === "auto" && ["hi", "mr"].includes(writtenLanguage)
-    ? writtenLanguage : spokenLanguage;
+  // Spoken and written language are independent: the recording uses only the spoken-language choice.
+  recordingLanguage = elements.speechLanguage.value || "auto";
   elements.cancelRecording.hidden = false;
   const requestId = ++microphoneRequest;
   let permissionTimer;
@@ -244,9 +367,11 @@ async function handleRecordingStopped() {
   }
 
   setVoiceBusy(true, "Transcribing locally...");
+  showRobot(true);
   const controller = new AbortController();
-  const transcriptionTimer = setTimeout(() => controller.abort(), recordingLanguage === "hi" ? 190_000 : 130_000);
+  const transcriptionTimer = setTimeout(() => controller.abort(), ["hi", "ur", "gu"].includes(recordingLanguage) ? 190_000 : 130_000);
   let reviewNotice = null;
+  let failed = false;
   try {
     const response = await fetch(`/api/transcribe?mode=transcribe&language=${encodeURIComponent(recordingLanguage)}`, {
       method: "POST",
@@ -257,7 +382,10 @@ async function handleRecordingStopped() {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Speech transcription failed.");
 
+    await finishRobotLoop();
+    showRobot(false);
     elements.query.value = data.text;
+    updateQueryCount();
     voiceInput = { inputMode: "voice", inputLanguage: data.inputLanguage || data.originalLanguage,
       languageProbability: data.languageProbability, languageSource: data.languageSource, originalInput: data.text };
     markResultsStale("Transcription complete · review before analysis");
@@ -272,10 +400,13 @@ async function handleRecordingStopped() {
     if (reviewNotice) elements.voiceState.textContent = reviewNotice.message;
     elements.query.focus();
   } catch (error) {
+    failed = true;
     showVoiceError(error.name === "AbortError" ? "Local transcription timed out. Try a shorter recording." : error.message);
   } finally {
     clearTimeout(transcriptionTimer);
+    showRobot(false);
     setVoiceBusy(false, elements.voiceState.textContent, reviewNotice);
+    if (failed) elements.voiceState.dataset.state = "error";
   }
 }
 
@@ -341,13 +472,19 @@ function showVoiceError(message) {
 }
 
 async function analyze() {
+  if (translationBusy) return;
   const query = elements.query.value.trim();
   if (!query) {
     renderError("Enter case facts or a legal query before analysis.");
+    setStage("idle");
     elements.query.focus();
     return;
   }
 
+  if (elements.languageState?.dataset.kind === "translation") {
+    elements.languageState.removeAttribute("data-kind");
+    elements.languageState.removeAttribute("data-state");
+  }
   setBusy(true);
   const controller = new AbortController();
   const analysisTimer = setTimeout(() => controller.abort(), 400_000);
@@ -363,7 +500,9 @@ async function analyze() {
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || "Analysis failed.");
     renderResult(data);
+    setStage("ready");
     lastAnalyzedQuery = query;
+    revealResults();
   } catch (error) {
     renderError(error.name === "AbortError" ? "Local analysis timed out. Shorten the query or use English; your original text is unchanged." : error.message);
   } finally {
@@ -378,6 +517,7 @@ function setBusy(isBusy) {
   if (elements.inputLanguage) elements.inputLanguage.disabled = isBusy || voiceBusy;
   elements.speechLanguage.disabled = isBusy || voiceBusy;
   refreshVoiceAvailability(true);
+  elements.analyze.dataset.busy = String(isBusy);
   elements.analyze.textContent = isBusy ? "Analyzing..." : activeInterfaceText?.analyze || "Analyze query";
   elements.inputState.textContent = isBusy
     ? voiceInput && voiceInput.inputLanguage !== "en" ? "Translating and analyzing locally..." : "Analyzing legal query..."
@@ -416,7 +556,7 @@ function renderResult(data) {
         <li class="retrieval-item">
           <div class="provision-heading">
             <strong>${escapeHtml(doc.code)} ${escapeHtml(doc.section)}${data.candidateOnly ? ` · ${escapeHtml(localized("candidateLabel", "Candidate"))}` : ""}</strong>
-            <span class="score"> · Relevance ${escapeHtml(doc.score)}</span>
+            <span class="score">Relevance ${escapeHtml(doc.score)}</span>
           </div>
           <h3 dir="auto">${escapeHtml(localized(`retrieved.${index}.title`, doc.title))}</h3>
           ${data.multilingual ? `<details class="statutory-source"><summary>Original statutory source</summary><p dir="ltr" lang="en">${escapeHtml(doc.excerpt)}</p></details>` : `<p dir="auto">${escapeHtml(doc.excerpt)}</p>`}
@@ -484,6 +624,7 @@ function renderStructuredResult(data) {
 }
 
 function renderError(message) {
+  setStage("ready");
   resetPresentationLabels();
   resetInterfaceText();
   if (elements.languageState) elements.languageState.textContent = "";
@@ -507,6 +648,7 @@ function markResultsStale(inputMessage = "Query changed · analyze to refresh re
   resetInterfaceText();
   if (elements.languageState) elements.languageState.textContent = "";
   lastAnalyzedQuery = "";
+  setStage("idle");
   elements.inputState.textContent = inputMessage;
   elements.route.textContent = "Awaiting analysis";
   elements.route.dataset.route = "WAITING";

@@ -390,6 +390,63 @@ async function translateMultiDateQuery(query, language, worker, alternateMarkers
   return translated.replace(markerPattern, marker => byMarker.get(marker));
 }
 
+// Whole-sentence translation reads far better than the literal-protecting path, whose fragments break grammar around
+// dates and section numbers. It is accepted only if every number in the source survives; otherwise the caller falls back.
+async function translateWholeSentences(text, source, target, worker) {
+  const pieces = text.match(/[^.!?;।۔\n]+[.!?;।۔\n]*/gu) || [];
+  const sentences = pieces.filter(piece => /\p{L}/u.test(piece));
+  if (!sentences.length) return null;
+  const result = await worker({ action: "translate", source, target,
+    modelPath: process.env.LOCAL_TRANSLATION_MODEL || join(ROOT, "models", "translation", "nllb-int8"),
+    texts: sentences.map(piece => piece.trim()) });
+  if (!Array.isArray(result?.texts) || result.texts.length !== sentences.length
+    || result.texts.some(value => typeof value !== "string" || !value.trim())) return null;
+  let next = 0;
+  const output = pieces.map(piece => {
+    if (!/\p{L}/u.test(piece)) return piece;
+    return piece.match(/^\s*/)[0] + result.texts[next++].trim() + piece.match(/\s*$/)[0];
+  }).join("");
+  const numbers = value => (normalizeDigits(value).match(/\d+(?:[.,]\d+)*/g) || []).sort().join("|");
+  return numbers(text) === numbers(output) ? output : null;
+}
+
+// Translates the text box itself when the user changes the written language. Whole-sentence translation is tried
+// first; if a number changes, the verified paths run: anything -> English is the analysis translation (dates
+// normalized, facts checked) and English -> X protects dates, section numbers and IPC/BNS references as literals.
+// Two non-English languages pivot through English on that fallback.
+export async function translateDisplayText(text, { source, target, worker = runTranslationWorker } = {}) {
+  const query = String(text ?? "").trim();
+  const to = normalizeLanguageCode(target);
+  if (!to || to === "auto" || !LANGUAGE_NAMES[to]) throw new TranslationError("UNSUPPORTED_LANGUAGE", "Choose a supported language to translate into.");
+  if (!query) return { text: "", sourceLanguage: null, targetLanguage: to, changed: false };
+  if (query.length > 4000) throw new TranslationError("TRANSLATION_TEXT_TOO_LONG", "Please keep the query under 4000 characters.", 413);
+  const hint = normalizeLanguageCode(source);
+  let from = hint && hint !== "auto" && LANGUAGE_NAMES[hint] && hasExpectedScript(query, hint) ? hint : null;
+  if (!from) from = clearlyEnglish(query) ? "en" : inferLanguageFromScript(query);
+  if (!from) {
+    const detected = await worker({ action: "detect", text: query });
+    if (!LANGUAGE_NAMES[detected?.language] || !(detected.confidence >= 0.8)) {
+      throw new TranslationError("LANGUAGE_UNCERTAIN", "The language of the text could not be identified reliably, so it was not translated. Your text is unchanged.");
+    }
+    from = detected.language;
+  }
+  if (from === to) return { text: query, sourceLanguage: from, targetLanguage: to, changed: false };
+  const tidy = value => value.replace(/[ \t]{2,}/g, " ").trim();
+  const done = (value, method) => ({ text: tidy(value), sourceLanguage: from, targetLanguage: to, changed: true, method });
+  let whole = null;
+  try {
+    whole = await translateWholeSentences(query, from, to, worker);
+    if (whole && to === "en") verifyOffenceTranslation(query, whole, from);
+  } catch {
+    whole = null;
+  }
+  if (whole) return done(whole, "whole-sentence");
+  const english = from === "en" ? query : repairTranslatedDateSpacing(await translateInputQuery(normalizeInputDates(query), from, worker));
+  if (from !== "en") verifyOffenceTranslation(query, english, from);
+  const output = to === "en" ? english : (await translateTexts([english], "en", to, worker))[0];
+  return done(output, from !== "en" && to !== "en" ? "english-pivot" : "protected-literals");
+}
+
 export async function analyzeMultilingualQuery(query, { originalLanguage, inputMode, inputLanguage, languageProbability, languageSource, originalInput, worker = runTranslationWorker } = {}) {
   const originalQuery = String(query || "").trim();
   if (!originalQuery) return analyzeQuery(originalQuery);
@@ -401,7 +458,7 @@ export async function analyzeMultilingualQuery(query, { originalLanguage, inputM
   const speechLanguage = normalizeLanguageCode(inputLanguage);
   const selectedSpeech = voice && languageSource === "user-selected";
   if (voice) {
-    if (selectedSpeech && !["hi", "mr"].includes(speechLanguage)) throw new TranslationError("UNSUPPORTED_LANGUAGE", "Choose Hindi or Marathi before recording; your transcript is unchanged.");
+    if (selectedSpeech && !["en", "hi", "mr", "ur", "gu"].includes(speechLanguage)) throw new TranslationError("UNSUPPORTED_LANGUAGE", "Choose English, Hindi, Marathi, Urdu, or Gujarati before recording; your transcript is unchanged.");
     if (!selectedSpeech) {
       const status = speechLanguageStatus(speechLanguage, languageProbability);
       if (status === "unsupported") throw new TranslationError("UNSUPPORTED_LANGUAGE", "The detected spoken language is unsupported. Your transcript is unchanged; please record in a supported language or clear it and type a new query.");

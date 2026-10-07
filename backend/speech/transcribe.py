@@ -15,6 +15,10 @@ except ModuleNotFoundError as error:
     from review import SpeechReviewObserver, review_model_class, supported_runtime
 
 
+SELECTED_LANGUAGES = ("en", "hi", "mr", "ur", "gu")
+INDIC_LANGUAGES = ("hi", "mr", "ur", "gu")
+
+
 def fail(code):
     print(json.dumps({"error": code}))
     sys.exit(1)
@@ -44,14 +48,14 @@ def _recognize(data, model, selected_language, decode_audio, decoded_audio=None)
     except Exception:
         return {"error": "INVALID_AUDIO"}
     try:
-        if selected_language in ("hi", "mr"):
+        if selected_language:
             detected_language, probability = None, None
         else:
             detected_language, probability, _ = model.detect_language(audio=audio, vad_filter=True)
         segments, _ = model.transcribe(
             audio, task="transcribe", language=selected_language or detected_language,
             beam_size=3, temperature=0, vad_filter=True, condition_on_previous_text=False,
-            initial_prompt=None if selected_language else "IPC, BNS, section, theft, cheating, movable property, without consent, dishonest intention",
+            initial_prompt=None if selected_language in INDIC_LANGUAGES else "IPC, BNS, section, theft, cheating, movable property, without consent, dishonest intention",
         )
         text = " ".join(segment.text.strip() for segment in segments).strip()
         return {"text": text, "originalLanguage": detected_language, "languageProbability": probability}
@@ -63,7 +67,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", required=True)
     parser.add_argument("--mode", choices=["transcribe"], required=True)
-    parser.add_argument("--language", choices=["hi", "mr"])
+    parser.add_argument("--language", choices=SELECTED_LANGUAGES)
     parser.add_argument("--stream", action="store_true")
     args = parser.parse_args()
     os.environ["HF_HUB_OFFLINE"] = "1"
@@ -94,7 +98,7 @@ def main():
     except Exception:
         fail("MODEL_LOAD_FAILED")
     if args.stream:
-        if args.language not in ("hi", "mr"):
+        if args.language not in SELECTED_LANGUAGES:
             fail("UNSUPPORTED_SPEECH_LANGUAGE")
         for raw in iter(lambda: sys.stdin.buffer.readline(14 * 1024 * 1024 + 1), b""):
             try:

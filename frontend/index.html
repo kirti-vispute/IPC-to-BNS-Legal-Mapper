@@ -20,9 +20,21 @@
           </div>
         </div>
         <div class="status" id="service-status" role="status">Checking service</div>
+        <svg class="hero-art" viewBox="0 0 260 200" fill="none" aria-hidden="true" focusable="false">
+          <circle cx="210" cy="50" r="46" class="art-sun" />
+          <circle cx="60" cy="170" r="30" class="art-dot" />
+          <path class="art-line" d="M130 30v130M96 168h68M62 62h136M62 62l-26 56h52l-26-56Zm136 0-26 56h52l-26-56Z" />
+          <path class="art-fill" d="M36 118h52a26 26 0 0 1-52 0Zm136 0h52a26 26 0 0 1-52 0Z" />
+          <circle cx="130" cy="24" r="8" class="art-gold" />
+        </svg>
+        <ul class="trust-row">
+          <li><span class="trust-icon trust-date" aria-hidden="true"></span>Date-aware law routing</li>
+          <li><span class="trust-icon trust-source" aria-hidden="true"></span>Official sources only</li>
+          <li><span class="trust-icon trust-local" aria-hidden="true"></span>Runs on your computer</li>
+        </ul>
       </header>
 
-      <nav class="workflow" aria-label="Analysis workflow">
+      <nav class="workflow" aria-label="Analysis workflow" data-stage="idle">
         <span><b>1</b> <span data-interface-text="workflowQuery">Query</span></span>
         <span><b>2</b> <span data-interface-text="workflowDate">Date extraction</span></span>
         <span><b>3</b> <span data-interface-text="workflowLaw">Applicable law</span></span>
@@ -39,52 +51,121 @@
           <span class="input-state" id="input-state">Ready for analysis</span>
         </div>
         <label class="sr-only" for="query" data-interface-text="queryPrompt">Enter case facts or a legal query</label>
-        <textarea
-          id="query"
-          dir="auto"
-          spellcheck="true"
-          placeholder="Enter or paste the case facts, including the alleged offence date when available..."
-          data-interface-placeholder="queryPlaceholder"
-        ></textarea>
-        <span id="language-state" class="voice-state" role="status"></span>
-        <div class="input-language-row">
-          <label class="speech-language" for="input-language"><span data-interface-text="writtenLanguage">Written language</span>
-            <select id="input-language" aria-label="Written language">
-              <option value="auto" data-interface-text="autoDetect">Auto detect</option>
-              <option value="en">English</option>
-              <option value="hi">Hindi</option>
-              <option value="mr">Marathi</option>
-              <option value="gu">Gujarati</option>
-              <option value="bn">Bengali</option>
-              <option value="ta">Tamil</option>
-              <option value="te">Telugu</option>
-              <option value="kn">Kannada</option>
-              <option value="ml">Malayalam</option>
-              <option value="pa">Punjabi</option>
-              <option value="ur">Urdu</option>
-            </select>
-          </label>
+        <div class="query-field">
+          <textarea
+            id="query"
+            dir="auto"
+            spellcheck="true"
+            placeholder="Enter or paste the case facts, including the alleged offence date when available..."
+            data-interface-placeholder="queryPlaceholder"
+          ></textarea>
+          <span id="query-count" class="query-count" aria-hidden="true">0 / 4000</span>
+          <div id="robot-stage" class="robot-stage" hidden aria-hidden="true">
+            <svg class="robot" viewBox="0 0 220 130" fill="none" focusable="false">
+              <ellipse class="rb-shadow" cx="110" cy="119" rx="92" ry="5" />
+              <!-- laptop the robot types on -->
+              <rect class="rb-laptop-base" x="128" y="102" width="74" height="9" rx="3" />
+              <rect class="rb-screen" x="136" y="62" width="58" height="42" rx="5" />
+              <rect class="rb-line rb-line-1" x="142" y="70" width="46" height="4" rx="2" />
+              <rect class="rb-line rb-line-2" x="142" y="79" width="38" height="4" rx="2" />
+              <rect class="rb-line rb-line-3" x="142" y="88" width="42" height="4" rx="2" />
+              <rect class="rb-cursor" x="186" y="87" width="3" height="7" rx="1" />
+              <!-- audio parcel the robot carries in -->
+              <g class="rb-parcel">
+                <rect x="14" y="74" width="34" height="26" rx="7" class="rb-parcel-body" />
+                <rect class="rb-bar rb-bar-1" x="21" y="82" width="4" height="10" rx="2" />
+                <rect class="rb-bar rb-bar-2" x="28" y="79" width="4" height="16" rx="2" />
+                <rect class="rb-bar rb-bar-3" x="35" y="83" width="4" height="8" rx="2" />
+                <rect class="rb-bar rb-bar-4" x="42" y="81" width="3" height="12" rx="1.5" />
+              </g>
+              <g class="rb-robot">
+                <!-- body and arms -->
+                <rect class="rb-body" x="62" y="66" width="46" height="42" rx="12" />
+                <circle class="rb-chest" cx="85" cy="86" r="5" />
+                <path class="rb-arm" d="M64 80 52 92" />
+                <path class="rb-arm rb-arm-typing" d="M106 80l20 14" />
+                <circle class="rb-hand rb-hand-left" cx="51" cy="93" r="4.5" />
+                <circle class="rb-hand rb-hand-right" cx="127" cy="95" r="4.5" />
+                <!-- head with earphones -->
+                <g class="rb-head">
+                  <line class="rb-antenna" x1="85" y1="30" x2="85" y2="20" />
+                  <circle class="rb-antenna-light" cx="85" cy="18" r="3.5" />
+                  <rect class="rb-face" x="66" y="30" width="38" height="32" rx="11" />
+                  <circle class="rb-eye rb-eye-left" cx="77" cy="46" r="3" />
+                  <circle class="rb-eye rb-eye-right" cx="93" cy="46" r="3" />
+                  <path class="rb-smile" d="M79 54q6 4 12 0" />
+                  <path class="rb-headband" d="M63 44a22 22 0 0 1 44 0" />
+                  <rect class="rb-cup" x="58" y="39" width="9" height="16" rx="4" />
+                  <rect class="rb-cup" x="103" y="39" width="9" height="16" rx="4" />
+                  <path class="rb-wave rb-wave-1" d="M52 44q-4 3 0 6" />
+                  <path class="rb-wave rb-wave-2" d="M47 41q-7 6 0 12" />
+                  <path class="rb-wave rb-wave-3" d="M118 44q4 3 0 6" />
+                  <path class="rb-wave rb-wave-4" d="M123 41q7 6 0 12" />
+                </g>
+              </g>
+            </svg>
+            <span class="robot-caption">Listening and typing it up…</span>
+          </div>
         </div>
-        <div class="actions">
+        <span id="language-state" class="voice-state language-state" role="status"></span>
+
+        <details class="examples">
+          <summary id="demo-heading" data-interface-text="demoHeading">Evaluation / Demo Cases</summary>
+          <div class="demo-content">
+            <p data-interface-text="demoDescription">Classroom test inputs for demonstrating temporal routing and review states. These are not user-facing legal categories.</p>
+            <div class="demo-list">
+              <button type="button" class="demo-case" data-sample="pre" data-interface-text="demoPre">Pre-transition theft</button>
+              <button type="button" class="demo-case" data-sample="post" data-interface-text="demoPost">Post-transition organized crime</button>
+              <button type="button" class="demo-case" data-sample="span" data-interface-text="demoSpan">Continuing offense</button>
+              <button type="button" class="demo-case" data-sample="missing" data-interface-text="demoMissing">Missing date</button>
+            </div>
+          </div>
+        </details>
+
+        <div class="control-bar">
+          <div class="language-controls">
+            <label class="speech-language" for="input-language"><span data-interface-text="writtenLanguage">Written language</span>
+              <select id="input-language" aria-label="Written language">
+                <option value="auto" data-interface-text="autoDetect">Auto detect</option>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="mr">Marathi</option>
+                <option value="gu">Gujarati</option>
+                <option value="bn">Bengali</option>
+                <option value="ta">Tamil</option>
+                <option value="te">Telugu</option>
+                <option value="kn">Kannada</option>
+                <option value="ml">Malayalam</option>
+                <option value="pa">Punjabi</option>
+                <option value="ur">Urdu</option>
+              </select>
+            </label>
+            <label class="speech-language" for="speech-language"><span data-interface-text="spokenLanguage">Spoken language</span>
+              <select id="speech-language" aria-label="Spoken language">
+                <option value="auto" data-interface-text="autoDetect">Auto detect</option>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+                <option value="mr">Marathi</option>
+                <option value="ur">Urdu</option>
+                <option value="gu">Gujarati</option>
+              </select>
+            </label>
+          </div>
           <div class="voice-input">
             <div class="voice-buttons">
-              <label class="speech-language" for="speech-language"><span data-interface-text="spokenLanguage">Spoken language</span>
-                <select id="speech-language" aria-label="Spoken language">
-                  <option value="auto" data-interface-text="autoDetect">Auto detect</option>
-                  <option value="hi">Hindi</option>
-                  <option value="mr">Marathi</option>
-                </select>
-              </label>
               <button id="voice-btn" class="secondary-button" type="button" disabled>Start recording</button>
               <button id="cancel-recording-btn" class="text-button" type="button" hidden>Cancel</button>
             </div>
             <span id="voice-state" class="voice-state" role="status">Checking voice input</span>
           </div>
-          <button id="analyze-btn" type="button" data-interface-text="analyze">Analyze query</button>
+          <div class="analyze-group">
+            <button id="analyze-btn" type="button" data-interface-text="analyze">Analyze query</button>
+            <span class="shortcut-hint" aria-hidden="true">Ctrl + Enter</span>
+          </div>
         </div>
       </section>
 
-      <section class="results" aria-live="polite" aria-label="Analysis results">
+      <section class="results" data-state="idle" aria-label="Analysis results">
         <div class="decision-strip">
           <div class="decision-item">
             <span data-result-label="extractedDate">Extracted offence date</span>
@@ -102,7 +183,7 @@
             <span data-result-label="groundingVerification">Grounding verifier</span>
             <strong id="verifier-status">Not run</strong>
           </div>
-          <p id="gate-message" class="law-explanation">Submit a legal query to determine the applicable statutory framework.</p>
+          <p id="gate-message" class="law-explanation" aria-live="polite">Submit a legal query to determine the applicable statutory framework.</p>
         </div>
 
         <div class="result-grid">
@@ -146,21 +227,6 @@
             <div id="irac-citations" class="irac-citations" hidden></div>
           </article>
         </div>
-      </section>
-
-      <section class="demo-section" aria-labelledby="demo-heading">
-        <details>
-          <summary id="demo-heading" data-interface-text="demoHeading">Evaluation / Demo Cases</summary>
-          <div class="demo-content">
-            <p data-interface-text="demoDescription">Classroom test inputs for demonstrating temporal routing and review states. These are not user-facing legal categories.</p>
-            <div class="demo-list">
-              <button type="button" class="demo-case" data-sample="pre" data-interface-text="demoPre">Pre-transition theft</button>
-              <button type="button" class="demo-case" data-sample="post" data-interface-text="demoPost">Post-transition organized crime</button>
-              <button type="button" class="demo-case" data-sample="span" data-interface-text="demoSpan">Continuing offense</button>
-              <button type="button" class="demo-case" data-sample="missing" data-interface-text="demoMissing">Missing date</button>
-            </div>
-          </div>
-        </details>
       </section>
     </main>
     <script type="module" src="/app.js"></script>

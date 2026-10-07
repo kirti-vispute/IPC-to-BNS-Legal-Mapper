@@ -1,0 +1,7 @@
+# Legal sources, data and manifests are verified by SHA-256 byte for byte, so Git must never
+# rewrite their line endings (Git for Windows defaults to core.autocrlf=true, which broke checksums).
+* text=auto eol=lf
+*.cmd text eol=crlf
+*.pdf binary
+*.png binary
+*.ico binary
