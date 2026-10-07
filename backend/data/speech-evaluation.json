@@ -1,0 +1,92 @@
+{
+  "dataset": "google/fleurs test split (CC BY 4.0), first 12 clips per language, read speech",
+  "note": "Measured through the project's real workers; word error rate normalises Unicode, case and punctuation only. Not a guarantee for other speech.",
+  "runs": [
+    "en-20261007T133118Z",
+    "gu-20261007T134051Z",
+    "hi-20261007T133447Z",
+    "ur-20261007T135036Z"
+  ],
+  "results": [
+    {
+      "language": "English",
+      "code": "en",
+      "model": "whisper-tiny (fallback)",
+      "WER": 16.6,
+      "CER": 7.1,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 1.3
+    },
+    {
+      "language": "English",
+      "code": "en",
+      "model": "whistle",
+      "WER": 13.6,
+      "CER": 6.4,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 1.6
+    },
+    {
+      "language": "Gujarati",
+      "code": "gu",
+      "model": "whisper-medium (generic baseline, not used)",
+      "WER": 139.0,
+      "CER": 96.4,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 11.6
+    },
+    {
+      "language": "Gujarati",
+      "code": "gu",
+      "model": "gujarati-medium-ct2",
+      "WER": 44.8,
+      "CER": 33.5,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 16.4
+    },
+    {
+      "language": "Hindi",
+      "code": "hi",
+      "model": "whisper-medium (generic baseline, not used)",
+      "WER": 37.9,
+      "CER": 17.1,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 12.0
+    },
+    {
+      "language": "Hindi",
+      "code": "hi",
+      "model": "hindi-medium-ct2",
+      "WER": 9.7,
+      "CER": 2.8,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 11.4
+    },
+    {
+      "language": "Urdu",
+      "code": "ur",
+      "model": "whisper-medium (generic baseline, not used)",
+      "WER": 30.0,
+      "CER": 10.5,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 8.5
+    },
+    {
+      "language": "Urdu",
+      "code": "ur",
+      "model": "urdu-large-v3-ct2",
+      "WER": 27.5,
+      "CER": 9.2,
+      "clips": 12,
+      "emptyOrFailed": 0,
+      "medianSecondsPerClip": 9.0
+    }
+  ]
+}

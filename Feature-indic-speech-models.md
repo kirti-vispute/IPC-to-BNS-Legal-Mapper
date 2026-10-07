@@ -7,7 +7,7 @@ Date: 2026-10-07. Scope: speech-to-text only. Legal retrieval, date routing, tra
 | Spoken language | Local model used | Source / licence | Notes |
 |---|---|---|---|
 | English (new selector entry) | Cactus Whistle, 16.9 MB | `Cactus-Compute/whistle`, Apache-2.0 | Falls back to faster-whisper tiny if not installed |
-| Hindi | `hindi-medium-ct2` if installed, else the previous pinned faster-whisper medium | `vasista22/whisper-hindi-medium`, Apache-2.0, converted to CTranslate2 int8 | `LOCAL_SPEECH_HINDI_MODEL` still overrides |
+| Hindi | `hindi-medium-ct2` (required) | `vasista22/whisper-hindi-medium`, Apache-2.0, converted to CTranslate2 int8 | No generic fallback; `LOCAL_SPEECH_HINDI_MODEL` can point to another folder explicitly |
 | Marathi | unchanged (Marathi-tuned Whisper small) | `durgesh10/whisper-small-marathi` | Not re-evaluated here |
 | Urdu (new) | `urdu-large-v3-ct2` | `kingabzpro/whisper-large-v3-urdu-ct2`, Apache-2.0 | No generic fallback; missing model returns a setup message |
 | Gujarati (new) | `gujarati-medium-ct2` | `vasista22/whisper-gujarati-medium`, Apache-2.0, converted to CTranslate2 int8 | No generic fallback; missing model returns a setup message |
@@ -21,7 +21,7 @@ Rejected: `ai4bharat/indic-conformer-600m-multilingual` covers all four language
 
 ```powershell
 .\.venv-speech\Scripts\python.exe -m pip install -r backend/speech/requirements.txt
-.\.venv-speech\Scripts\python.exe scripts/setup_local_speech.py                         # tiny, small, medium
+.\.venv-speech\Scripts\python.exe scripts/setup_local_speech.py                         # tiny and small (generic medium is no longer installed or used)
 .\.venv-speech\Scripts\python.exe scripts/setup_indic_speech.py --only whistle urdu     # about 0.8 GB
 .\.venv-translation\Scripts\python.exe scripts/setup_indic_speech.py --only hindi gujarati   # about 3 GB download each
 ```
@@ -48,13 +48,13 @@ All revisions are pinned and every weight file is SHA-256 verified before use (t
 | Language | Current / generic model | WER / CER | New model | WER / CER |
 |---|---|---|---|---|
 | English | whisper-tiny | 16.6 / 7.1 | Whistle | 13.6 / 6.4 |
-| Hindi | whisper-medium (current) | 37.9 / 17.1 | hindi-medium-ct2 | **9.7 / 2.8** |
-| Gujarati | whisper-medium (generic) | 139.0 / 96.5 | gujarati-medium-ct2 | 44.8 / 33.4 |
-| Urdu | whisper-medium (generic) | 30.0 / 10.5 | urdu-large-v3-ct2 | 27.5 / 9.2 |
+| Hindi | whisper-medium (generic baseline, not used) | 37.9 / 17.1 | hindi-medium-ct2 | **9.7 / 2.8** |
+| Gujarati | whisper-medium (generic baseline, not used) | 139.0 / 96.5 | gujarati-medium-ct2 | 44.8 / 33.4 |
+| Urdu | whisper-medium (generic baseline, not used) | 30.0 / 10.5 | urdu-large-v3-ct2 | 27.5 / 9.2 |
 
 Read these as direction, not accuracy claims: 12 clips per language, one read-speech corpus, one machine.
 
-- **Hindi** clears the earlier preregistered gates: no clip worse on word or character edits, no Latin letters (the old model emitted English spellings such as "standing supergy"), and the same speed (median about 11-12 s per clip). Default switched to the tuned model when installed. Real error remaining: "100 साल" heard as "10 साल".
+- **Hindi** clears the earlier preregistered gates: no clip worse on word or character edits, no Latin letters (the old model emitted English spellings such as "standing supergy"), and the same speed (median about 11-12 s per clip). The tuned model is the only Hindi model; there is no generic fallback. Real error remaining: "100 साल" heard as "10 साल".
 - **Gujarati**: generic Whisper is unusable (hallucinated output), the tuned model is far better but still rough (several clips near-perfect, others with spelling variants and a wrong number, "29" heard as "39"). The model card reports 12.3 WER; this stricter scoring did not reproduce that. Treat Gujarati as needing careful transcript review.
 - **Urdu**: only a small gain over generic Whisper; do not expect good accuracy.
 - **English**: Whistle is somewhat better overall, and on a 38 s synthetic legal clip it got "Bharatiya Nyaya Sanhita" right where tiny produced "Bharati and Ayya Sanhada". But Whistle sometimes writes numbers as words ("twenty five") and once dropped a century ("21 June 24" for 2024) on a synthetic legal sentence; tiny got that one right. Windowing on the 38 s clip lost no sentences but added a stray word at the seam. Always check dates and section numbers.
@@ -69,4 +69,4 @@ Read these as direction, not accuracy claims: 12 clips per language, one read-sp
 
 ## Rollback
 
-Delete `models/speech/{whistle,urdu-large-v3-ct2,gujarati-medium-ct2,hindi-medium-ct2}`: English falls back to tiny, Hindi to medium, and Urdu/Gujarati return the setup message. To restore the old UI behaviour revert the files listed in "How it is wired".
+Delete `models/speech/{whistle,urdu-large-v3-ct2,gujarati-medium-ct2,hindi-medium-ct2}`: English falls back to tiny, and Hindi, Urdu and Gujarati return the setup message (they do not fall back to anything). To restore the old UI behaviour revert the files listed in "How it is wired".

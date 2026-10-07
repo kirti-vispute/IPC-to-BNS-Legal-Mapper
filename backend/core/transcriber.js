@@ -3,6 +3,9 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { basename, join } from "node:path";
 import { LANGUAGE_NAMES, normalizeLanguageCode, speechLanguageStatus } from "./languages.js";
+import { SPEECH_MODEL_REGISTRY, TUNED_ONLY_LANGUAGES, missingModelMessage } from "./speechModels.js";
+import { postprocessTranscript } from "./asrPostprocess.js";
+import { analyzeText } from "./nlp/index.js";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const WORKER = join(ROOT, "backend", "speech", "transcribe.py");
@@ -11,10 +14,9 @@ export const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
 export const WHISPER_MODEL = "faster-whisper-tiny (local CPU int8)";
 export const SELECTED_WHISPER_MODEL = "faster-whisper-small (local CPU int8)";
 export const MARATHI_WHISPER_MODEL = "Marathi-tuned Whisper small (local CPU int8)";
-export const HINDI_WHISPER_MODEL = "faster-whisper-medium (local CPU int8)";
-export const HINDI_TUNED_WHISPER_MODEL = "Hindi-tuned Whisper medium (local CPU int8)";
-export const URDU_WHISPER_MODEL = "Urdu-tuned Whisper large-v3-turbo (local CPU int8)";
-export const GUJARATI_WHISPER_MODEL = "Gujarati-tuned Whisper medium (local CPU int8)";
+export const HINDI_TUNED_WHISPER_MODEL = SPEECH_MODEL_REGISTRY.hi.label;
+export const URDU_WHISPER_MODEL = SPEECH_MODEL_REGISTRY.ur.label;
+export const GUJARATI_WHISPER_MODEL = SPEECH_MODEL_REGISTRY.gu.label;
 export const WHISTLE_MODEL = "Cactus Whistle (local CPU)";
 const MODEL_FILES = ["model.bin", "config.json", "tokenizer.json", "vocabulary.txt"];
 const CT2_CORE_FILES = ["model.bin", "config.json", "tokenizer.json"];
@@ -22,8 +24,10 @@ const WHISTLE_ENGINES = ["libneedle.dll", "libneedle.so", "libneedle.dylib"];
 const SELECTABLE_LANGUAGES = new Set(["en", "hi", "mr", "ur", "gu"]);
 // Larger local models (and long Indic speech) need the longer worker and browser deadlines.
 const SLOW_LANGUAGES = new Set(["hi", "ur", "gu"]);
+// Video containers are accepted too: the decoder (PyAV) extracts and resamples their audio track to 16 kHz mono.
+const VIDEO_TYPES = ["video/mp4", "video/webm", "video/ogg", "video/quicktime", "video/x-matroska", "video/x-msvideo"];
 const AUDIO_TYPES = new Set(["audio/flac", "audio/x-flac", "audio/m4a", "audio/x-m4a",
-  "audio/mp3", "audio/mpeg", "audio/mpga", "audio/mp4", "audio/ogg", "audio/wav", "audio/x-wav", "audio/webm"]);
+  "audio/mp3", "audio/mpeg", "audio/mpga", "audio/mp4", "audio/ogg", "audio/wav", "audio/x-wav", "audio/webm", ...VIDEO_TYPES]);
 const WORKER_ERRORS = {
   RECOGNIZER_UNAVAILABLE: [503, "Local recognizer dependencies are unavailable. Run the local speech setup."],
   MODEL_MISSING: [503, "Local speech model is missing. Run the local speech setup."],
@@ -48,11 +52,11 @@ export function localSpeechConfig() {
     modelPath: process.env.LOCAL_SPEECH_MODEL || join(ROOT, "models", "speech", "whisper-tiny"),
     indicModelPath: process.env.LOCAL_SPEECH_INDIC_MODEL || join(ROOT, "models", "speech", "whisper-small"),
     marathiModelPath: process.env.LOCAL_SPEECH_MARATHI_MODEL || process.env.LOCAL_SPEECH_INDIC_MODEL || join(ROOT, "models", "speech", "marathi-small-ct2"),
-    hindiModelPath: process.env.LOCAL_SPEECH_HINDI_MODEL || join(ROOT, "models", "speech", "whisper-medium"),
-    // Preferred when installed unless LOCAL_SPEECH_HINDI_MODEL pins a specific folder.
-    hindiTunedModelPath: process.env.LOCAL_SPEECH_HINDI_MODEL ? null : join(ROOT, "models", "speech", "hindi-medium-ct2"),
-    urduModelPath: process.env.LOCAL_SPEECH_URDU_MODEL || join(ROOT, "models", "speech", "urdu-large-v3-ct2"),
-    gujaratiModelPath: process.env.LOCAL_SPEECH_GUJARATI_MODEL || join(ROOT, "models", "speech", "gujarati-medium-ct2"),
+    // Hindi, Urdu and Gujarati: the registry's tuned model, or an explicitly configured folder. Never a generic model.
+    ...Object.fromEntries(TUNED_ONLY_LANGUAGES.map(code => {
+      const entry = SPEECH_MODEL_REGISTRY[code];
+      return [entry.configKey, process.env[entry.envVar] || join(ROOT, "models", "speech", entry.directory)];
+    })),
     whistleModelPath: process.env.LOCAL_SPEECH_WHISTLE_MODEL || join(ROOT, "models", "speech", "whistle")
   };
 }
@@ -73,14 +77,12 @@ export function speechStatus(config = localSpeechConfig(), exists = existsSync) 
   const indicModelReady = MODEL_FILES.every(file => exists(join(config.indicModelPath || join(ROOT, "models", "speech", "whisper-small"), file)));
   const marathiModelPath = config.marathiModelPath || join(ROOT, "models", "speech", "marathi-small-ct2");
   const marathiModelReady = ["model.bin", "config.json", "tokenizer.json", "vocabulary.json"].every(file => exists(join(marathiModelPath, file)));
-  const hindiModelReady = ctModelReady(config.hindiModelPath || join(ROOT, "models", "speech", "whisper-medium"), exists);
-  const hindiTunedPath = config.hindiTunedModelPath === undefined ? join(ROOT, "models", "speech", "hindi-medium-ct2") : config.hindiTunedModelPath;
-  const hindiTunedModelReady = hindiTunedPath ? ctModelReady(hindiTunedPath, exists) : false;
-  const urduModelReady = ctModelReady(config.urduModelPath || join(ROOT, "models", "speech", "urdu-large-v3-ct2"), exists);
-  const gujaratiModelReady = ctModelReady(config.gujaratiModelPath || join(ROOT, "models", "speech", "gujarati-medium-ct2"), exists);
+  const tunedReady = Object.fromEntries(TUNED_ONLY_LANGUAGES.map(code => {
+    const entry = SPEECH_MODEL_REGISTRY[code];
+    return [entry.statusKey, ctModelReady(config[entry.configKey] || join(ROOT, "models", "speech", entry.directory), exists)];
+  }));
   const whistleModelReady = whistleReady(config.whistleModelPath || join(ROOT, "models", "speech", "whistle"), exists);
-  return { configured: runtimeReady && modelReady, engine: "faster-whisper (local)", runtimeReady, modelReady, indicModelReady, marathiModelReady, hindiModelReady, hindiTunedModelReady,
-    urduModelReady, gujaratiModelReady, whistleReady: whistleModelReady };
+  return { configured: runtimeReady && modelReady, engine: "faster-whisper (local)", runtimeReady, modelReady, indicModelReady, marathiModelReady, ...tunedReady, whistleReady: whistleModelReady };
 }
 
 export function normalizeAudioType(contentType) {
@@ -92,7 +94,7 @@ export function validateAudioInput(audio, contentType, mode = "transcribe", lang
   const mimeType = normalizeAudioType(contentType);
   if (!bytes.length) throw new TranscriptionError("Record some speech before requesting transcription.", 400, "EMPTY_AUDIO");
   if (bytes.length > MAX_AUDIO_BYTES) throw new TranscriptionError("The recording is too large. Keep it under 10 MiB.", 413, "AUDIO_TOO_LARGE");
-  if (!AUDIO_TYPES.has(mimeType)) throw new TranscriptionError("Unsupported audio format. Use WebM, OGG, WAV, MP3, MP4, M4A, or FLAC audio.", 415, "UNSUPPORTED_AUDIO_TYPE");
+  if (!AUDIO_TYPES.has(mimeType)) throw new TranscriptionError("Unsupported format. Use WebM, OGG, WAV, MP3, MP4, M4A or FLAC audio, or an MP4, WebM, MKV, MOV or AVI video with an audio track.", 415, "UNSUPPORTED_AUDIO_TYPE");
   if (mode !== "transcribe") throw new TranscriptionError("Use native-language transcription; text translation happens during analysis.", 400, "UNSUPPORTED_SPEECH_MODE");
   if (language !== "auto" && !SELECTABLE_LANGUAGES.has(language)) throw new TranscriptionError("Choose Auto, English, Hindi, Marathi, Urdu, or Gujarati for recording.", 400, "UNSUPPORTED_SPEECH_LANGUAGE");
   return { bytes, mimeType, mode, selectedLanguage: language === "auto" ? null : language };
@@ -254,10 +256,13 @@ export async function transcribeAudio({ audio, contentType, mode = "transcribe",
       ? { ...config, modelPath: selected.modelPath, selectedLanguage: validated.selectedLanguage, ...(selected.worker ? { worker: selected.worker } : {}) } : config;
     const payload = await runner({ ...validated, config: workerConfig,
       timeoutMs: timeoutMs ?? (SLOW_LANGUAGES.has(validated.selectedLanguage) ? 180_000 : 120_000) });
-    const text = String(payload.text || "").trim();
-    if (!text) throw new TranscriptionError("No speech was detected. Please record the query again.", 422, "NO_SPEECH_DETECTED");
+    const rawText = String(payload.text || "").trim();
+    if (!rawText) throw new TranscriptionError("No speech was detected. Please record the query again.", 422, "NO_SPEECH_DETECTED");
     const detectedLanguage = normalizeLanguageCode(payload.originalLanguage);
     const resolvedLanguage = validated.selectedLanguage || detectedLanguage;
+    // Text normalization, inverse text normalization, acronym and lexicon correction, confidence review (see asrPostprocess.js).
+    const processed = postprocessTranscript(rawText, { language: resolvedLanguage, words: sanitizeWords(payload.words), segments: sanitizeSegments(payload.segments) });
+    const text = processed.text || rawText;
     const probability = validated.selectedLanguage ? null : payload.languageProbability ?? null;
     const speechReview = validated.selectedLanguage === "mr" && Object.hasOwn(payload, "speechReview")
       ? validateSpeechReview(payload.speechReview) : null;
@@ -267,6 +272,9 @@ export async function transcribeAudio({ audio, contentType, mode = "transcribe",
       languageName: LANGUAGE_NAMES[resolvedLanguage] || resolvedLanguage || "Unknown",
       languageSource: validated.selectedLanguage ? "user-selected" : "automatic",
       languageStatus: validated.selectedLanguage ? "selected" : speechLanguageStatus(resolvedLanguage, probability),
+      rawText, corrections: processed.corrections, confidence: processed.confidence, confidenceLevel: processed.confidenceLevel,
+      uncertainWords: processed.uncertainWords, uncertainSegments: processed.uncertainSegments,
+      nlp: analyzeText(text, { language: resolvedLanguage }),
       languageProbability: probability, detectedLanguage,
       detectedLanguageProbability: payload.languageProbability ?? null,
       ...(speechReview ? { speechReview } : {}) };
@@ -275,31 +283,21 @@ export async function transcribeAudio({ audio, contentType, mode = "transcribe",
   }
 }
 
-// One place decides which local model, label and worker serve each selected spoken language.
-// Hindi prefers the validated tuned model when installed, else LOCAL_SPEECH_HINDI_MODEL / pinned faster-whisper medium;
-// Urdu and Gujarati have no usable generic fallback, so a missing tuned model fails closed.
+// One place decides which local model, label and worker serve each selected spoken language, driven by the registry.
+// Hindi, Urdu and Gujarati are tuned-only: a missing model fails closed with a setup message, never a generic fallback.
 function resolveSelectedModel(language, status, config) {
   const models = join(ROOT, "models", "speech");
+  const entry = SPEECH_MODEL_REGISTRY[language];
+  if (entry && entry.genericFallback === false) {
+    const modelPath = config[entry.configKey] || join(models, entry.directory);
+    return { ready: status[entry.statusKey], modelPath, missingMessage: missingModelMessage(language),
+      label: basename(modelPath) === entry.directory ? entry.label : `${entry.language} model from ${entry.envVar} (local CPU int8)` };
+  }
   switch (language) {
-    case "hi": {
-      if (status.hindiTunedModelReady) {
-        const tuned = config.hindiTunedModelPath === undefined ? join(models, "hindi-medium-ct2") : config.hindiTunedModelPath;
-        return { ready: true, modelPath: tuned, label: HINDI_TUNED_WHISPER_MODEL };
-      }
-      const modelPath = config.hindiModelPath || join(models, "whisper-medium");
-      return { ready: status.hindiModelReady, modelPath,
-        label: basename(modelPath) === "hindi-medium-ct2" ? HINDI_TUNED_WHISPER_MODEL : HINDI_WHISPER_MODEL };
-    }
     case "mr":
       return status.marathiModelReady
         ? { ready: true, modelPath: config.marathiModelPath || join(models, "marathi-small-ct2"), label: MARATHI_WHISPER_MODEL }
         : { ready: status.indicModelReady, modelPath: config.indicModelPath || join(models, "whisper-small"), label: SELECTED_WHISPER_MODEL };
-    case "ur":
-      return { ready: status.urduModelReady, modelPath: config.urduModelPath || join(models, "urdu-large-v3-ct2"), label: URDU_WHISPER_MODEL,
-        missingMessage: "The local Urdu speech model is missing. Run: python scripts/setup_indic_speech.py --only urdu" };
-    case "gu":
-      return { ready: status.gujaratiModelReady, modelPath: config.gujaratiModelPath || join(models, "gujarati-medium-ct2"), label: GUJARATI_WHISPER_MODEL,
-        missingMessage: "The local Gujarati speech model is missing. Run: python scripts/setup_indic_speech.py --only gujarati" };
     case "en":
       // Whistle is English-only; without it, fall back to the tiny model forced to English.
       return status.whistleReady
@@ -308,6 +306,19 @@ function resolveSelectedModel(language, status, config) {
     default:
       return { ready: status.modelReady, modelPath: config.modelPath, label: WHISPER_MODEL };
   }
+}
+
+// Worker confidence data is untrusted input: keep only bounded, well-typed entries.
+function sanitizeSegments(value) {
+  if (!Array.isArray(value)) return null;
+  return value.slice(0, 128).filter(item => item && typeof item.text === "string" && Number.isFinite(item.p) && item.p >= 0 && item.p <= 1)
+    .map(item => ({ text: item.text.slice(0, 1000), p: item.p }));
+}
+
+function sanitizeWords(value) {
+  if (!Array.isArray(value)) return null;
+  return value.slice(0, 800).filter(item => item && typeof item.w === "string" && Number.isFinite(item.p) && item.p >= 0 && item.p <= 1)
+    .map(item => ({ w: item.w.slice(0, 60), p: item.p }));
 }
 
 function validateSpeechReview(review) {

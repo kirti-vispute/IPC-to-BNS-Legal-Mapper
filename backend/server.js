@@ -7,6 +7,8 @@ import { dirname } from "node:path";
 import { analyzeMultilingualQuery, createStreamingTranslationWorker, translateDisplayText } from "./core/multilingual.js";
 import { getCorpus } from "./core/retriever.js";
 import { MAX_AUDIO_BYTES, speechStatus, transcribeAudio } from "./core/transcriber.js";
+import { analyzeText } from "./core/nlp/index.js";
+import { describePipeline } from "./core/nlp/pipeline.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = normalize(join(__dirname, ".."));
@@ -48,9 +50,23 @@ const server = http.createServer(async (req, res) => {
         return sendJson(res, { error: "Query is required." }, 400);
       }
 
-      return sendJson(res, await analyzeMultilingualQuery(query, { originalLanguage: body.originalLanguage,
+      const result = await analyzeMultilingualQuery(query, { originalLanguage: body.originalLanguage,
         inputMode: body.inputMode, inputLanguage: body.inputLanguage, languageProbability: body.languageProbability,
-        languageSource: body.languageSource, originalInput: body.originalInput, worker: translationWorker }));
+        languageSource: body.languageSource, originalInput: body.originalInput, worker: translationWorker });
+      // NLP view of the text exactly as the user wrote or spoke it (the legal analysis itself is unchanged).
+      return sendJson(res, { ...result, nlp: analyzeText(query, { language: result.multilingual?.originalLanguage || body.inputLanguage || body.originalLanguage }) });
+    }
+
+    if (req.method === "POST" && url.pathname === "/api/nlp/analyze") {
+      const body = await readJson(req);
+      const text = String(body.text || "");
+      if (!text.trim()) return sendJson(res, { error: "Text is required." }, 400);
+      if (text.length > 4000) return sendJson(res, { error: "Please keep the text under 4000 characters." }, 413);
+      return sendJson(res, analyzeText(text, { language: body.language }));
+    }
+
+    if (req.method === "GET" && url.pathname === "/api/nlp/pipeline") {
+      return sendJson(res, describePipeline(speechStatus()));
     }
 
     if (req.method === "POST" && url.pathname === "/api/translate") {

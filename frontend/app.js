@@ -133,6 +133,12 @@ async function finishRobotLoop() {
   await new Promise((resolve) => setTimeout(resolve, Math.max(0, loop.duration - elapsed)));
 }
 
+// The NLP panel (nlpPanel.js) listens for this event; nothing else depends on it.
+function emitNlp(detail) {
+  if (!detail?.nlp || typeof CustomEvent !== "function" || typeof document.dispatchEvent !== "function") return;
+  document.dispatchEvent(new CustomEvent("nlp-analysis", { detail }));
+}
+
 function revealResults() {
   const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
   elements.results?.scrollIntoView?.({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
@@ -386,6 +392,9 @@ async function handleRecordingStopped() {
     showRobot(false);
     elements.query.value = data.text;
     updateQueryCount();
+    emitNlp({ nlp: data.nlp, source: "speech", model: data.model, transcription: {
+      rawText: data.rawText, corrections: data.corrections || [], confidence: data.confidence ?? null, confidenceLevel: data.confidenceLevel || null,
+      uncertainWords: data.uncertainWords || [], uncertainSegments: data.uncertainSegments || [] } });
     voiceInput = { inputMode: "voice", inputLanguage: data.inputLanguage || data.originalLanguage,
       languageProbability: data.languageProbability, languageSource: data.languageSource, originalInput: data.text };
     markResultsStale("Transcription complete · review before analysis");
@@ -501,6 +510,7 @@ async function analyze() {
     if (!response.ok) throw new Error(data.error || "Analysis failed.");
     renderResult(data);
     setStage("ready");
+    emitNlp({ nlp: data.nlp, source: "analysis", facts: data.facts });
     lastAnalyzedQuery = query;
     revealResults();
   } catch (error) {

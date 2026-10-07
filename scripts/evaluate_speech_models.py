@@ -25,12 +25,12 @@ ROOT = Path(__file__).resolve().parents[1]
 SPEECH = ROOT / "models" / "speech"
 CONFIGS = {"en": "en_us", "hi": "hi_in", "gu": "gu_in", "ur": "ur_pk"}
 TRANSCRIBE, WHISTLE = ROOT / "backend/speech/transcribe.py", ROOT / "backend/speech/whistle_worker.py"
-# (label, model folder, worker script). The first entry of each language is what the app uses today.
+# (label, model folder, worker script). The first entry is the comparison baseline; the tuned model is what the app uses.
 CANDIDATES = {
-    "en": [("whisper-tiny (current)", "whisper-tiny", TRANSCRIBE), ("whistle", "whistle", WHISTLE)],
-    "hi": [("whisper-medium (current)", "whisper-medium", TRANSCRIBE), ("hindi-medium-ct2", "hindi-medium-ct2", TRANSCRIBE)],
-    "gu": [("whisper-medium (generic)", "whisper-medium", TRANSCRIBE), ("gujarati-medium-ct2", "gujarati-medium-ct2", TRANSCRIBE)],
-    "ur": [("whisper-medium (generic)", "whisper-medium", TRANSCRIBE), ("urdu-large-v3-ct2", "urdu-large-v3-ct2", TRANSCRIBE)],
+    "en": [("whisper-tiny (fallback)", "whisper-tiny", TRANSCRIBE), ("whistle", "whistle", WHISTLE)],
+    "hi": [("whisper-medium (generic baseline, not used)", "whisper-medium", TRANSCRIBE), ("hindi-medium-ct2", "hindi-medium-ct2", TRANSCRIBE)],
+    "gu": [("whisper-medium (generic baseline, not used)", "whisper-medium", TRANSCRIBE), ("gujarati-medium-ct2", "gujarati-medium-ct2", TRANSCRIBE)],
+    "ur": [("whisper-medium (generic baseline, not used)", "whisper-medium", TRANSCRIBE), ("urdu-large-v3-ct2", "urdu-large-v3-ct2", TRANSCRIBE)],
 }
 CLIP_DEADLINE = 190
 
@@ -142,13 +142,59 @@ def summarize(run, clips):
             "firstClipSeconds": times[0] if times else None, "totalSeconds": run["totalSeconds"]}
 
 
+LANGUAGE_NAMES = {"en": "English", "hi": "Hindi", "gu": "Gujarati", "ur": "Urdu"}
+
+
+def friendly(label):
+    """Saved runs from before the registry call generic Whisper medium "(current)" or "(generic)"; say what it is now."""
+    if label.startswith("whisper-medium"):
+        return "whisper-medium (generic baseline, not used)"
+    return "whisper-tiny (fallback)" if label.startswith("whisper-tiny") else label
+
+
+def report(root, write):
+    """Summarise the latest saved run per language WITHOUT running any model; optionally write the website data file."""
+    rows, runs = [], []
+    for language in sorted(CONFIGS):
+        folders = sorted((root / "output" / "speech-model-comparison").glob(f"{language}-*/summary.json"))
+        if not folders:
+            continue
+        saved = json.loads(folders[-1].read_text(encoding="utf-8"))
+        runs.append(folders[-1].parent.name)
+        for item in saved["summaries"]:
+            rows.append({"language": LANGUAGE_NAMES[language], "code": language, "model": friendly(item["label"]), "WER": item["WER"], "CER": item["CER"],
+                         "clips": item["clips"], "emptyOrFailed": item["emptyOrFailed"], "medianSecondsPerClip": item["medianSecondsPerClip"]})
+    if not rows:
+        print("No saved runs found under output/speech-model-comparison/. Run this script with --language first.")
+        return 1
+    print(f"{'Language':10} {'Model':30} {'WER %':>7} {'CER %':>7} {'Clips':>6}")
+    for row in rows:
+        print(f"{row['language']:10} {row['model']:30} {row['WER']:>7} {row['CER']:>7} {row['clips']:>6}")
+    if write:
+        payload = {
+            "dataset": "google/fleurs test split (CC BY 4.0), first 12 clips per language, read speech",
+            "note": "Measured through the project's real workers; word error rate normalises Unicode, case and punctuation only. Not a guarantee for other speech.",
+            "runs": runs, "results": rows
+        }
+        write.parent.mkdir(parents=True, exist_ok=True)
+        write.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + chr(10), encoding="utf-8")
+        print(f"Wrote {write}")
+    return 0
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--language", choices=sorted(CONFIGS), required=True)
+    parser.add_argument("--report", action="store_true", help="print language-wise WER from the saved runs (no models are run)")
+    parser.add_argument("--write", type=Path, help="with --report: write the results to this JSON file (the website reads backend/data/speech-evaluation.json)")
+    parser.add_argument("--language", choices=sorted(CONFIGS))
     parser.add_argument("--limit", type=int, default=12)
     parser.add_argument("--only", nargs="*", help="run only candidate labels containing these strings")
     parser.add_argument("--rescore", type=Path, help="re-score a saved run folder from its raw replies without re-running models")
     args = parser.parse_args()
+    if args.report:
+        sys.exit(report(ROOT, args.write))
+    if not args.language:
+        parser.error("--language is required unless --report is used")
     if args.rescore:
         clips = json.loads((args.rescore / "clips.json").read_text(encoding="utf-8"))
         for raw in sorted(args.rescore.glob("raw-*.json")):

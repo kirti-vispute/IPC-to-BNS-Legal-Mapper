@@ -2,14 +2,14 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, resolve } from "node:path";
-import { HINDI_WHISPER_MODEL, MARATHI_WHISPER_MODEL } from "../backend/core/transcriber.js";
+import { HINDI_TUNED_WHISPER_MODEL, MARATHI_WHISPER_MODEL } from "../backend/core/transcriber.js";
 
 const root = resolve(import.meta.dirname, "..");
 const out = join(root, "output/public-speech-validation/voice-selection-20261006/live");
 const sha = bytes => createHash("sha256").update(bytes).digest("hex");
 const read = async path => JSON.parse(await readFile(join(root, path), "utf8"));
 const fixtures = [
-  { manifest: "output/voice-verification/real-speech/fixtures.json", name: "hi-44.wav", language: "hi", model: HINDI_WHISPER_MODEL },
+  { manifest: "output/voice-verification/real-speech/fixtures.json", name: "hi-44.wav", language: "hi", model: HINDI_TUNED_WHISPER_MODEL },
   { manifest: "output/public-speech-validation/fresh-marathi-20261003/fixtures.json", name: "mr-30.wav", language: "mr", model: MARATHI_WHISPER_MODEL }
 ];
 const sourceFiles = ["scripts/verify_voice_language_selection.mjs", "tests/voiceLanguageSelection.test.js",

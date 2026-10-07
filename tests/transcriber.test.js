@@ -81,20 +81,47 @@ test("converted Marathi vocabulary format is accepted and missing both Marathi m
     runner: () => { throw Error("must not use another model"); } }), error => error.code === "MODEL_MISSING");
 });
 
-test("selected Hindi falls back to the pinned medium model when the tuned model is absent, with a longer deadline", async () => {
+test("selected Hindi uses the tuned model with a longer worker deadline and reports detection only as diagnostics", async () => {
   let used;
-  const exists = path => !path.includes("hindi-medium-ct2");
-  const result = await transcribeAudio({ ...input, language: "hi", exists, runner: async options => {
+  const result = await transcribeAudio({ ...input, language: "hi", runner: async options => {
     used = options;
     return { text: "चोरी हुई", originalLanguage: "ur", languageProbability: 0.4 };
   } });
-  assert.match(used.config.modelPath, /whisper-medium$/);
+  assert.match(used.config.modelPath, /hindi-medium-ct2$/);
   assert.equal(used.config.selectedLanguage, "hi");
   assert.equal(used.timeoutMs, 180_000);
-  assert.match(result.model, /medium/);
   assert.equal(result.inputLanguage, "hi");
   assert.equal(result.detectedLanguage, "ur");
   assert.equal(result.languageProbability, null);
+});
+
+test("Hindi, Urdu and Gujarati never fall back to a generic Whisper model when their tuned model is missing", async () => {
+  // Generic tiny/small/medium folders all exist; only the tuned folders are absent.
+  const exists = path => !/(hindi|urdu|gujarati)/.test(path);
+  for (const [language, folder] of [["hi", "hindi-medium-ct2"], ["ur", "urdu-large-v3-ct2"], ["gu", "gujarati-medium-ct2"]]) {
+    await assert.rejects(transcribeAudio({ ...input, language, exists, runner: () => { throw Error("must not run any model"); } }), error => {
+      assert.equal(error.code, "MODEL_MISSING");
+      assert.equal(error.statusCode, 503);
+      assert.ok(error.message.includes(folder), error.message);
+      assert.match(error.message, /scripts\/setup_indic_speech\.py --only/);
+      assert.match(error.message, /generic Whisper model is deliberately not used/);
+      return true;
+    });
+  }
+});
+
+test("the model registry lists exactly the tuned-only languages and describes each model", async () => {
+  const { SPEECH_MODEL_REGISTRY, TUNED_ONLY_LANGUAGES, describeRegistry } = await import("../backend/core/speechModels.js");
+  assert.deepEqual([...TUNED_ONLY_LANGUAGES].sort(), ["gu", "hi", "ur"]);
+  for (const code of TUNED_ONLY_LANGUAGES) {
+    const entry = SPEECH_MODEL_REGISTRY[code];
+    assert.equal(entry.genericFallback, false);
+    for (const key of ["language", "directory", "configKey", "statusKey", "envVar", "label", "setup"]) assert.ok(entry[key], `${code}.${key}`);
+    assert.ok(entry.source.repo && entry.source.license);
+  }
+  const described = describeRegistry({ hindiModelReady: true, urduModelReady: false });
+  assert.equal(described.find(item => item.code === "hi").installed, true);
+  assert.equal(described.find(item => item.code === "ur").installed, false);
 });
 
 test("selected Hindi prefers the validated tuned model when installed", async () => {
@@ -109,7 +136,7 @@ test("selected Hindi prefers the validated tuned model when installed", async ()
 });
 
 test("an explicit Hindi model override beats the tuned default", async () => {
-  const config = { python: "python", modelPath: "tiny", hindiModelPath: "custom-hindi", hindiTunedModelPath: null };
+  const config = { python: "python", modelPath: "tiny", hindiModelPath: "custom-hindi" };
   let used;
   await transcribeAudio({ ...input, language: "hi", config, runner: async options => { used = options.config; return { text: "चोरी हुई" }; } });
   assert.equal(used.modelPath, "custom-hindi");
@@ -433,4 +460,65 @@ test("Whistle and Whisper selections never share a streaming worker process", as
   assert.match(spawned[0], /whistle_worker\.py$/);
   assert.match(spawned[1], /transcribe\.py$/);
   runner.close();
+});
+
+test("the transcript is post-processed: numbers become digits, the raw text and an audit log are kept", async () => {
+  const spoken = "The offence took place on the twenty first of June twenty twenty four under section three seventy nine of the I P C";
+  const result = await transcribeAudio({ ...input, language: "en", runner: async () => ({ text: spoken, originalLanguage: "en" }) });
+  assert.equal(result.text, "The offence took place on 21 June 2024 under section 379 of the IPC");
+  assert.equal(result.rawText, spoken);
+  assert.equal(result.originalInput, result.text, "voice metadata follows the corrected, reviewable text");
+  assert.deepEqual(result.corrections.map(item => item.kind).sort(), ["acronym", "date", "section"]);
+  // The corrected text feeds the unchanged legal pipeline.
+  const analysis = analyzeQuery(result.text);
+  assert.equal(analysis.facts.offenseDate, "2024-06-21");
+  assert.ok(analysis.facts.sections.includes("379"));
+});
+
+test("Indian-script acronyms are normalised so the translator protects them as literals", async () => {
+  const result = await transcribeAudio({ ...input, language: "hi", runner: async () => ({ text: "आईपीसी धारा 379 के तहत चोरी हुई", originalLanguage: "hi" }) });
+  assert.equal(result.text, "IPC धारा 379 के तहत चोरी हुई");
+  assert.equal(result.corrections[0].to, "IPC");
+});
+
+test("the result carries the NLP analysis of the final transcript in the selected language", async () => {
+  const result = await transcribeAudio({ ...input, language: "gu", runner: async () => ({ text: "૨૦ જૂન ૨૦૨૪ ના રોજ ચોરી થઈ. IPC કલમ 379.", originalLanguage: "gu" }) });
+  assert.equal(result.nlp.language.code, "gu");
+  assert.equal(result.nlp.language.source, "provided");
+  assert.ok(result.nlp.entities.some(entity => entity.type === "DATE" && entity.value === "2024-06-20"));
+  assert.ok(result.nlp.entities.some(entity => entity.type === "SECTION" && entity.value === "IPC 379"));
+  assert.ok(result.nlp.entities.some(entity => entity.type === "OFFENCE" && entity.value === "theft"));
+  assert.equal(result.nlp.capabilities.lemmatization, false);
+});
+
+test("worker confidence data is sanitised and low segments are surfaced for review", async () => {
+  const result = await transcribeAudio({ ...input, language: "hi", runner: async () => ({ text: "चोरी हुई", originalLanguage: "hi", segments: [
+    { text: "चोरी", p: 0.2 }, { text: "हुई", p: 0.95 }, { text: "x", p: 7 }, { text: 5, p: 0.1 }, null, { text: "no p" }
+  ] }) });
+  assert.deepEqual(result.uncertainSegments, [{ text: "चोरी", probability: 0.2 }]);
+  assert.equal(result.confidenceLevel, "segment");
+  assert.ok(result.confidence > 0 && result.confidence < 1);
+});
+
+test("Whistle word probabilities give word-level confidence", async () => {
+  const result = await transcribeAudio({ ...input, language: "en", runner: async () => ({ text: "Section 379 applies", originalLanguage: "en", words: [
+    { w: "Section", p: 0.99 }, { w: "379", p: 0.6 }, { w: "applies", p: 0.9 }
+  ] }) });
+  assert.equal(result.confidenceLevel, "word");
+  assert.deepEqual(result.uncertainWords, [{ word: "379", probability: 0.6 }]);
+});
+
+test("an unreadable or missing confidence field never breaks the transcript", async () => {
+  for (const extra of [{}, { segments: "bad" }, { words: 7 }, { segments: [] }]) {
+    const result = await transcribeAudio({ ...input, language: "en", runner: async () => ({ text: "Plain text.", originalLanguage: "en", ...extra }) });
+    assert.equal(result.text, "Plain text.");
+    assert.equal(result.confidence, null);
+  }
+});
+
+test("video containers are accepted as input because the decoder extracts their audio track", () => {
+  for (const type of ["video/mp4", "video/webm", "video/quicktime", "video/x-matroska"]) {
+    assert.equal(validateAudioInput(Buffer.from("x"), type, "transcribe", "hi").mimeType, type);
+  }
+  assert.throws(() => validateAudioInput(Buffer.from("x"), "image/png", "transcribe", "hi"), error => error.code === "UNSUPPORTED_AUDIO_TYPE");
 });

@@ -3,6 +3,7 @@ import argparse
 import base64
 import io
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -57,8 +58,12 @@ def _recognize(data, model, selected_language, decode_audio, decoded_audio=None)
             beam_size=3, temperature=0, vad_filter=True, condition_on_previous_text=False,
             initial_prompt=None if selected_language in INDIC_LANGUAGES else "IPC, BNS, section, theft, cheating, movable property, without consent, dishonest intention",
         )
+        segments = list(segments)
         text = " ".join(segment.text.strip() for segment in segments).strip()
-        return {"text": text, "originalLanguage": detected_language, "languageProbability": probability}
+        # Segment confidence = exp(mean token log-probability). Cheap, and unlike word timestamps it cannot change the text.
+        confidence = [{"text": segment.text.strip()[:400], "p": round(math.exp(min(0.0, max(-10.0, segment.avg_logprob))), 3)}
+                      for segment in segments if segment.text.strip()][:64]
+        return {"text": text, "originalLanguage": detected_language, "languageProbability": probability, "segments": confidence}
     except Exception:
         return {"error": "SPEECH_PROCESS_ERROR"}
 

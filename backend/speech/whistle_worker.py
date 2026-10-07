@@ -66,13 +66,17 @@ def recognize(data, whistle, decode_audio, keywords, decoded_audio=None):
     except Exception:
         return {"error": "INVALID_AUDIO"}
     try:
-        parts = []
+        parts, words = [], []
         for window in split_windows(audio):
-            result = whistle.transcribe(window, language="en", keywords=keywords or None)
+            # Word probabilities come from the decoder itself; verified not to change the transcript or its speed.
+            result = whistle.transcribe(window, language="en", keywords=keywords or None, word_timestamps=True)
             text = str(result.get("text", "")).strip()
             if text:
                 parts.append(text)
-        return {"text": " ".join(parts), "originalLanguage": "en", "languageProbability": None}
+            for item in result.get("words", []) or []:
+                if isinstance(item, dict) and isinstance(item.get("word"), str) and isinstance(item.get("probability"), (int, float)):
+                    words.append({"w": item["word"], "p": round(float(item["probability"]), 3)})
+        return {"text": " ".join(parts), "originalLanguage": "en", "languageProbability": None, "words": words[:800]}
     except Exception:
         return {"error": "SPEECH_PROCESS_ERROR"}
 

@@ -77,15 +77,19 @@ class RecognizeTests(unittest.TestCase):
         def __init__(self, texts):
             self.texts, self.calls = list(texts), []
 
-        def transcribe(self, audio, language=None, keywords=None):
+        def transcribe(self, audio, language=None, keywords=None, word_timestamps=False):
             self.calls.append((audio.size, language, keywords))
-            return {"text": self.texts.pop(0)}
+            text = self.texts.pop(0)
+            return {"text": text, "words": [{"word": word, "start": 0, "end": 0, "probability": 0.9} for word in text.split()]}
 
     def test_window_texts_are_joined_in_order_and_empty_windows_skipped(self):
         fake = self.FakeWhistle(["first part", "", "last part"])
         audio = tone(75)
         result = worker.recognize(b"", fake, None, ["IPC"], decoded_audio=audio)
-        self.assertEqual(result, {"text": "first part last part", "originalLanguage": "en", "languageProbability": None})
+        self.assertEqual(result["text"], "first part last part")
+        self.assertEqual(result["originalLanguage"], "en")
+        self.assertEqual([item["w"] for item in result["words"]], ["first", "part", "last", "part"])
+        self.assertTrue(all(item["p"] == 0.9 for item in result["words"]))
         self.assertEqual(len(fake.calls), 3)
         self.assertTrue(all(call[1] == "en" and call[2] == ["IPC"] for call in fake.calls))
 

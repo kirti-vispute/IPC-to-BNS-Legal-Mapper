@@ -29,6 +29,7 @@ Multilingual input/output: automatically detects supported Indian-language text,
 - Review flags when the answer needs human verification
 - Static frontend served by the backend: responsive (phone to desktop), light tinted theme, shows results only after the first analysis, offers Ctrl+Enter to analyze and a print-friendly results view
 - Written language and spoken language are independent. Changing "Written language" translates the text already in the box locally (nothing happens if it is empty; Auto detect never translates); choosing another language translates your original text again and choosing the original language restores it exactly. This is machine translation: check dates, names and section numbers before analyzing. Endpoint: `POST /api/translate`
+- Multilingual NLP layer for transcripts and typed text (Hindi, Urdu, Gujarati, English; Marathi as before). Whisper is the separate ASR deep-learning component that produces the text. The NLP layer then runs text normalization, legal terminology normalization, sentence segmentation, Unicode-aware tokenization, stop-word handling with negation preservation, light stemming, rule-based/gazetteer legal entities (date, section, law, money, offence) and RAKE keyphrases, and reuses the existing rule-based legal concept classification. Lemmatization, POS tagging, dependency parsing, sentiment, person/place/organization NER, embeddings, RAG and LLM-based NLP are not implemented. Audit and measured speech word error rates: [Feature-multilingual-nlp-pipeline.md](Feature-multilingual-nlp-pipeline.md)
 - While a recording is converted to text, a small robot animation plays inside the text box; the transcript appears only when the current animation loop finishes
 - Free local native voice transcription with a selectable spoken language: English (Cactus Whistle), Hindi, Marathi, Urdu and Gujarati (pretrained, locally converted Whisper models), plus Auto detect
 - Dependency-free Node.js backend
@@ -78,7 +79,7 @@ py -3.12 -m venv .venv-speech
 .\.venv-speech\Scripts\python.exe scripts/setup_local_speech.py
 ```
 
-Setup installs the free [faster-whisper engine](https://github.com/SYSTRAN/faster-whisper) and downloads pinned [tiny](https://huggingface.co/Systran/faster-whisper-tiny), [small](https://huggingface.co/Systran/faster-whisper-small), and [medium](https://huggingface.co/Systran/faster-whisper-medium) multilingual models into local `models/speech/` folders. Auto uses tiny and selected Hindi uses medium. Selected Marathi prefers the optional Marathi-tuned small model below and falls back to multilingual small when it is absent. Internet is needed only for setup, not inference. The medium model adds about 1.53 GB on disk and makes Hindi transcription slower. No virtual-environment activation or separate FFmpeg installation is needed.
+Setup installs the free [faster-whisper engine](https://github.com/SYSTRAN/faster-whisper) and downloads pinned [tiny](https://huggingface.co/Systran/faster-whisper-tiny) and [small](https://huggingface.co/Systran/faster-whisper-small) multilingual models into local `models/speech/` folders. Auto uses tiny; selected Hindi, Urdu and Gujarati use their own language-tuned models (below) and never a generic one. Selected Marathi prefers the optional Marathi-tuned small model below and falls back to multilingual small when it is absent. Internet is needed only for setup, not inference. No virtual-environment activation or separate FFmpeg installation is needed.
 
 For the Marathi-tuned model, run this one-time pinned download and checksum-verified conversion (about 967 MB source and 248 MB converted weights):
 
@@ -88,16 +89,16 @@ py -3.12 -m venv .venv-translation
 .\.venv-translation\Scripts\python.exe scripts/setup_marathi_speech.py
 ```
 
-Optional pretrained models for English, Urdu, Gujarati and a Hindi candidate (one-time, checksum-verified, offline afterwards; details, measured results and limits in [Feature-indic-speech-models.md](Feature-indic-speech-models.md)):
+Required language-tuned models for Hindi, Urdu and Gujarati, plus Whistle for English (one-time, checksum-verified, offline afterwards; details, measured results and limits in [Feature-indic-speech-models.md](Feature-indic-speech-models.md)):
 
 ```powershell
 # English (Cactus Whistle, about 18 MB) and Urdu (about 0.8 GB), in the speech environment
 .\.venv-speech\Scripts\python.exe scripts/setup_indic_speech.py --only whistle urdu
-# Gujarati and the Hindi candidate (about 3 GB download each, about 0.75 GB converted), in the translation environment
+# Hindi and Gujarati (about 3 GB download each, about 0.75 GB converted), in the translation environment
 .\.venv-translation\Scripts\python.exe scripts/setup_indic_speech.py --only hindi gujarati
 ```
 
-Selecting Urdu or Gujarati without its model returns a setup message and never falls back to a generic model. Selecting English without Whistle falls back to the tiny model. Hindi keeps using the pinned medium model until the converted candidate is chosen with `LOCAL_SPEECH_HINDI_MODEL=models/speech/hindi-medium-ct2`.
+Selecting Hindi, Urdu or Gujarati without its tuned model returns a setup message naming the command to run; it never falls back to a generic Whisper model, which measured far worse (Gujarati 139% word error rate against 44.8% for the tuned model). Selecting English without Whistle falls back to the tiny model. `LOCAL_SPEECH_HINDI_MODEL`, `LOCAL_SPEECH_URDU_MODEL` and `LOCAL_SPEECH_GUJARATI_MODEL` point a language at another folder explicitly. The language-to-model table lives in `backend/core/speechModels.js`. After transcription the text goes through a language-specific NLP pipeline; see [Feature-multilingual-nlp-pipeline.md](Feature-multilingual-nlp-pipeline.md).
 
 The speech model and test audio are not part of the legal corpus.
 
@@ -123,6 +124,7 @@ See `Feature-whisper-voice-input.md` for model paths, limits, troubleshooting, v
 node --test tests/*.test.js
 node scripts/evaluate_retrieval.mjs
 python -m unittest tests.test_whistle_worker
+python scripts/evaluate_speech_models.py --report   # language-wise WER from saved runs, no models run
 ```
 
 Compare local speech models on held-out public FLEURS test clips with `scripts/evaluate_speech_models.py --language {en,hi,gu,ur}`.
